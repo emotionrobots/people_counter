@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "peoplecounter8af2c262": {
+      "service": "Cognito",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

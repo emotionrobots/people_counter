@@ -1,0 +1,25 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-peoplecounter-dev-201512-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730884470554:role/amplify-peoplecounter-dev-201512-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730884470554:role/amplify-peoplecounter-dev-201512-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-peoplecounter-dev-201512-deployment",
+      "UnauthRoleName": "amplify-peoplecounter-dev-201512-unauthRole",
+      "StackName": "amplify-peoplecounter-dev-201512",
+      "StackId": "arn:aws:cloudformation:us-east-1:730884470554:stack/amplify-peoplecounter-dev-201512/0a50aba0-1d9e-11ec-8156-0eb02c81fec9",
+      "AmplifyAppId": "d2xkmq5sua8112"
+    },
+    "categories": {
+      "auth": {
+        "peoplecounter8af2c262": {
+          "userPoolId": "us-east-1_pLyQY4wgB",
+          "userPoolName": "PeopleCounterUsers",
+          "webClientId": "4mc316gdmd3o7637bqoqp2j99f",
+          "nativeClientId": "4mc316gdmd3o7637bqoqp2j99f"
+        }
+      }
+    }
+  }
+}

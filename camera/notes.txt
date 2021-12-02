@@ -1,0 +1,15 @@
+  File "/home/ubuntu/Software/mzheng/ros/devel/lib/img_proc/img_proc_node.py", line 15, in <module>
+    exec(compile(fh.read(), python_script, 'exec'), context)
+  File "/home/ubuntu/Software/mzheng/ros/src/img_proc/scripts/img_proc_node.py", line 578, in <module>
+    main(sys.argv[1:])    
+  File "/home/ubuntu/Software/mzheng/ros/src/img_proc/scripts/img_proc_node.py", line 574, in main
+    node.start()
+  File "/home/ubuntu/Software/mzheng/ros/src/img_proc/scripts/img_proc_node.py", line 560, in start
+    self.periodic()
+  File "/home/ubuntu/Software/mzheng/ros/src/img_proc/scripts/img_proc_node.py", line 502, in periodic
+    self.tracker.update(np.array(blobs))
+  File "/home/ubuntu/Software/mzheng/ros/src/img_proc/scripts/Tracker.py", line 189, in update
+    x, y = self.getCenter(b)
+  File "/home/ubuntu/Software/mzheng/ros/src/img_proc/scripts/BlobTracker.py", line 55, in getCenter
+    x = M['m10']/M['m00']
+ZeroDivisionError: float division by zero
