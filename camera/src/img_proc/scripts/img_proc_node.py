@@ -473,7 +473,7 @@ class ImgProcNode(object):
     aimg = self.camera['amp']
     zpoints = self.camera['z']
 
-    client.publish("presence", json.dumps("periodic is running"))
+    #client.publish("presence", json.dumps("periodic is running"))
     #print('periodic is running')
     
     backgroundMask = self.getBgMask(aimg)
