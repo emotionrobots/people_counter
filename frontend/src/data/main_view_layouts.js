@@ -92,7 +92,7 @@ export const PROFILE_LAYOUT = {
             row: 1,
             column: 1,
             size: {
-                width: 3,
+                width: 1,
                 height: 1
             }
         },
@@ -103,36 +103,36 @@ export const PROFILE_LAYOUT = {
             column: 1,
             size: {
                 width: 1,
-                height: 4
+                height: 2
             }
         },
         {
             data: 'orgs',
             color: 'red-500',
-            row: 2,
+            row: 1,
             column: 2,
             size: {
                 width: 1,
-                height: 2
+                height: 3
             }
         },
         {
             data: 'camGroups',
             color: 'green-500',
-            row: 2,
+            row: 1,
             column: 3,
             size: {
                 width: 1,
-                height: 2
+                height: 3
             }
         },
         {
-            data: 'myCamInfo',
+            data: 'orgs-horz',
             color: 'ebony-clay',
             row: 4,
-            column: 2,
+            column: 1,
             size: {
-                width: 2,
+                width: 3,
                 height: 2
             }
         },

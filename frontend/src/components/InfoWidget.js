@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Card from './Card';
@@ -7,73 +7,69 @@ import Report from './InfoWidgetTypes/Report';
 import Single from './InfoWidgetTypes/Single';
 import { getInfoWidget } from '../data/user_data';
 import Chart from './InfoWidgetTypes/Chart';
+import Settings from './InfoWidgetTypes/Settings';
+import ListAndInfo from './InfoWidgetTypes/ListAndInfo';
+import { StateContext } from './Contexts/StateContext';
 
 export const InfoWidgetTypes = {
     SINGLE: "infocard.single",
     REPORT: "infocard.report",
     CHART: "infocard.chart",
-    LOADING: "infocard.waiting"
+    LOADING: "infocard.waiting",
+    SETTINGS: "infocard.settings",
+    LISTPLUSINFO: "infocard.listinfo"
 }
 
-class InfoWidget extends Component {
-    state = {
-        cardType: InfoWidgetTypes.LOADING,
-        attributes: {
-
+    function renderBody(state) {
+        switch (state.cardType) {
+            case InfoWidgetTypes.LOADING:
+                return <Loading />;
+            case InfoWidgetTypes.REPORT:
+                return <Report data={state.attributes.data}/>;
+            case InfoWidgetTypes.SINGLE:
+                return <Single data={state.attributes} />;
+            case InfoWidgetTypes.CHART:
+                return <Chart data={state.attributes.data} />;
+            case InfoWidgetTypes.SETTINGS:
+                return <Settings data={state.attributes.data}/>;
+            case InfoWidgetTypes.LISTPLUSINFO:
+                return <ListAndInfo data={state.attributes.data} horz={state.attributes.horz}></ListAndInfo>;
+            default:
+                break;
         }
     }
 
-    setInfoWidget = () => {
-        console.log(this.props.data)
-        getInfoWidget(this.props.data, (ret) => {
+export function InfoWidget(props) {
+    const [global_state,] = useContext(StateContext);
+    const [state, setState] = useState({
+        cardType: InfoWidgetTypes.LOADING,
+    })
+
+    const setInfoWidget = () => {
+        getInfoWidget(props.data, (ret) => {
             if(ret === "Error") {
-                this.setState({
+                setState({
                     cardType: InfoWidgetTypes.SINGLE,
                     attributes: {
                         data: "Error"
                     }
                 })
             } else {
-                console.log(ret)
-                this.setState(ret)
+                setState(ret)
             }
-        })
+        }, global_state.currentSelectedCamGroup)
     }
 
-    componentDidMount() {
-        this.setInfoWidget()
-        // this.setInfoWidget.bind(this)
-        
-        // setInterval(this.setInfoWidget, 5000);
-    }
+    useEffect(setInfoWidget, [
+        props.data,
+        global_state.currentSelectedCamGroup
+    ])
 
-    componentWillUnmount() {
-        // use intervalId from the state to clear the interval
-        // clearInterval(this.state.intervalId);
-    }
-
-    renderBody() {
-        switch (this.state.cardType) {
-            case InfoWidgetTypes.LOADING:
-                return <Loading />;
-            case InfoWidgetTypes.REPORT:
-                return <Report data={this.state.attributes.data}/>;
-            case InfoWidgetTypes.SINGLE:
-                return <Single data={this.state.attributes} />;
-            case InfoWidgetTypes.CHART:
-                return <Chart data={this.state.attributes.data} />;
-            default:
-                break;
-        }
-    }
-
-    render() {
-        return (
-            <Card bgColor={this.props.bgColor}>
-                {this.renderBody()}
-            </Card>
-        );
-    }
+    return (
+        <Card bgColor={props.bgColor}>
+            {renderBody(state)}
+        </Card>
+    );
 }
 
 InfoWidget.propTypes = {

@@ -4,8 +4,10 @@ function Dropdown(props) {
     return (
         <div className="relative mb-1 hover:bg-blue-400 rounded-lg">
         <select onChange={props.onChange} className="block appearance-none w-full bg-transparent border-gray-200 text-white py-3 px-4 pr-8 leading-tight focus:outline-none font-bold">
-            {props.options.map((option) =>
-                <option key={option}>{option}</option>
+            {props.options.map((option, ind) =>
+                props.selected === ind ?
+                <option key={option} selected>{option}</option>
+                : <option key={option}>{option}</option>
             )}
         </select>
         <div className="absolute flex inset-y-0 items-center px-3 right-0 font-bold text-white pointer-events-none">

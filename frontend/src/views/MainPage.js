@@ -12,6 +12,7 @@ import { getUserContext } from '../data/user_data';
 import { GlobalAppReducer, initialState } from '../components/Contexts/Reducer';
 import { StateContext } from '../components/Contexts/StateContext';
 import Loading from '../components/InfoWidgetTypes/Loading';
+import { RefreshIcon } from '@heroicons/react/solid';
 
 const routes = [
   {
@@ -40,8 +41,11 @@ function getPage(userContext, state) {
         <div className="flex flex-row max-w-full">
           <p className="text-white text-lg mb-6">People Counter</p>
           <div className="flex-grow mb-6"></div>
+          <p className='text-gray-500 text-base mr-2'>Data last refreshed </p>
+          <RefreshIcon className="text-white h-6 w-6 hover:bg-blue-400 rounded-md p-1" onClick={() => {
+          }}></RefreshIcon>
         </div>
-        <div className="flex flex-row h-full">
+        <div className="flex h-full">
           <Sidebar></Sidebar>
           <Switch>
             {routes.map((route, index) => (
