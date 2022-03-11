@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/Software/mzheng/ros/src
+# Install script for directory: /home/ubuntu/Software/people_counter/camera/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Software/mzheng/ros/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Software/people_counter/camera/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -49,90 +49,90 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Software/mzheng/ros/install/_setup_util.py")
+   "/home/ubuntu/Software/people_counter/camera/install/_setup_util.py")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Software/mzheng/ros/install" TYPE PROGRAM FILES "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/_setup_util.py")
+file(INSTALL DESTINATION "/home/ubuntu/Software/people_counter/camera/install" TYPE PROGRAM FILES "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/_setup_util.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Software/mzheng/ros/install/env.sh")
+   "/home/ubuntu/Software/people_counter/camera/install/env.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Software/mzheng/ros/install" TYPE PROGRAM FILES "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/env.sh")
+file(INSTALL DESTINATION "/home/ubuntu/Software/people_counter/camera/install" TYPE PROGRAM FILES "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/env.sh")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Software/mzheng/ros/install/setup.bash;/home/ubuntu/Software/mzheng/ros/install/local_setup.bash")
+   "/home/ubuntu/Software/people_counter/camera/install/setup.bash;/home/ubuntu/Software/people_counter/camera/install/local_setup.bash")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Software/mzheng/ros/install" TYPE FILE FILES
-    "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/setup.bash"
-    "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/local_setup.bash"
+file(INSTALL DESTINATION "/home/ubuntu/Software/people_counter/camera/install" TYPE FILE FILES
+    "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/setup.bash"
+    "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/local_setup.bash"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Software/mzheng/ros/install/setup.sh;/home/ubuntu/Software/mzheng/ros/install/local_setup.sh")
+   "/home/ubuntu/Software/people_counter/camera/install/setup.sh;/home/ubuntu/Software/people_counter/camera/install/local_setup.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Software/mzheng/ros/install" TYPE FILE FILES
-    "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/setup.sh"
-    "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/local_setup.sh"
+file(INSTALL DESTINATION "/home/ubuntu/Software/people_counter/camera/install" TYPE FILE FILES
+    "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/setup.sh"
+    "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/local_setup.sh"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Software/mzheng/ros/install/setup.zsh;/home/ubuntu/Software/mzheng/ros/install/local_setup.zsh")
+   "/home/ubuntu/Software/people_counter/camera/install/setup.zsh;/home/ubuntu/Software/people_counter/camera/install/local_setup.zsh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Software/mzheng/ros/install" TYPE FILE FILES
-    "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/setup.zsh"
-    "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/local_setup.zsh"
+file(INSTALL DESTINATION "/home/ubuntu/Software/people_counter/camera/install" TYPE FILE FILES
+    "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/setup.zsh"
+    "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/local_setup.zsh"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Software/mzheng/ros/install/.rosinstall")
+   "/home/ubuntu/Software/people_counter/camera/install/.rosinstall")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Software/mzheng/ros/install" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/build/catkin_generated/installspace/.rosinstall")
+file(INSTALL DESTINATION "/home/ubuntu/Software/people_counter/camera/install" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/build/catkin_generated/installspace/.rosinstall")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/ubuntu/Software/mzheng/ros/build/gtest/cmake_install.cmake")
-  include("/home/ubuntu/Software/mzheng/ros/build/img_proc/cmake_install.cmake")
-  include("/home/ubuntu/Software/mzheng/ros/build/espros_tof_cam635/cmake_install.cmake")
+  include("/home/ubuntu/Software/people_counter/camera/build/gtest/cmake_install.cmake")
+  include("/home/ubuntu/Software/people_counter/camera/build/img_proc/cmake_install.cmake")
+  include("/home/ubuntu/Software/people_counter/camera/build/espros_tof_cam635/cmake_install.cmake")
 
 endif()
 
@@ -144,5 +144,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ubuntu/Software/mzheng/ros/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/ubuntu/Software/people_counter/camera/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
