@@ -55,7 +55,7 @@ def on_message(client, userdata, msg):
     print("Message received-> " + msg.topic + " " + str(msg.payload))
     
 def getDateTime(now):
-    datetime = now.strftime("%Y/%m/%d %H:%M:%S")
+    datetime = now.strftime("%Y-%m-%d %H:%M:%S")
     '''
     time = format(now.strftime("%H"))
     day = format(now.strftime("%d"))
@@ -119,11 +119,13 @@ class Message:
 mydb = mysql.connector.connect(
   host="localhost",
   user="emotioneering",
-  password="password"
+  password="password",
+  databse="history"
 )
-
+#time DATETIME, enterCount smallint unsigned, exitCount smallint unsigned
 mycursor = mydb.cursor()
 
+sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%Y-%m-%d %H:%M:%S, %d, %d)"
 
 #===========================================================================
 #  dynamic_reconfigure callback 
