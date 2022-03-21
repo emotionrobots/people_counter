@@ -8,9 +8,11 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-mycursor.execute("CREATE DATABASE history")
+#mycursor.execute("CREATE DATABASE history")
 
-mycursor.execute("SHOW DATABASES")
+#mycursor.execute("SHOW DATABASES")
 
-for x in mycursor:
-  print(x)
+#for x in mycursor:
+  #print(x)
+
+mycursor.execute("CREATE TABLE history (id INT AUTO_INCREMENT PRIMARY KEY, time DATETIME, enter SMALLINT UNSIGNED, exit SMALLINT UNSIGNED)")

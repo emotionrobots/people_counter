@@ -40,6 +40,7 @@ import tf2_ros
 import tf2_py as tf2
 from tf2_sensor_msgs.tf2_sensor_msgs import do_transform_cloud
 import paho.mqtt.client as mqtt
+import mysql.connector
 from BlobTracker import BlobTracker
 
 
@@ -111,6 +112,18 @@ class Message:
     d["enter"] = self.enter
     d["exit"] = self.exit
     return json.dumps(d)
+
+#===========================================================================
+# mysql connector and cursor setup
+#===========================================================================
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="emotioneering",
+  password="password"
+)
+
+mycursor = mydb.cursor()
+
 
 #===========================================================================
 #  dynamic_reconfigure callback 
@@ -258,12 +271,12 @@ class ImgProcNode(object):
   #  Compute learningRate based on movement
   #===================================================
   def computeLearningRate(self, diff):
-    lr = 0
+    lr = 0.0
     alpha = self.learningRateAlpha
     lrMax = self.learningRateMax
     if diff < 96:
     	eta = diff / 9600.0
-    	lr = alpha / (eta + alpha/lrMax)
+      lr = alpha / (eta + alpha/lrMax)
     return lr
 
   #===================================================
