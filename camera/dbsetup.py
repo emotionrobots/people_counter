@@ -15,7 +15,7 @@ mycursor = mydb.cursor()
 #for x in mycursor:
   #print(x)
 
-mycursor.execute("CREATE TABLE history (id int AUTO_INCREMENT PRIMARY KEY, time DATETIME, enter smallint UNSIGNED NOT NULL, exit smallint UNSIGNED NOT NULL)")
+mycursor.execute("CREATE TABLE history (id int AUTO_INCREMENT PRIMARY KEY, time DATETIME, enterCount smallint unsigned, exitCount smallint unsigned)")
 
 mycursor.execute("SHOW TABLES")
 
