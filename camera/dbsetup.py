@@ -16,3 +16,8 @@ mycursor = mydb.cursor()
   #print(x)
 
 mycursor.execute("CREATE TABLE history (id INT AUTO_INCREMENT PRIMARY KEY, time DATETIME, enter SMALLINT UNSIGNED, exit SMALLINT UNSIGNED)")
+
+mycursor.execute("SHOW TABLES")
+
+for x in mycursor:
+  print(x)
