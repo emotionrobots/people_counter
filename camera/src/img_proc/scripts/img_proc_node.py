@@ -569,7 +569,12 @@ class ImgProcNode(object):
       dt = getDateTime(now)
       if not (peopleEntered == 0 and peopleExited == 0):
         m1 = Message("rpi4", 16, "Store entrance", dt, peopleEntered, peopleExited)
-  
+
+        mysqlVal = (dt, peopleEntered, peopleExited)
+        mycursor.execute(sql, val)
+
+        mydb.commit()
+        
         client.publish("presence", json.dumps(m1.dictStr()))
         print(m1.dictStr())
 
