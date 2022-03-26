@@ -601,7 +601,7 @@ class ImgProcNode(object):
 
         mysqlVal = (dt, peopleEntered, peopleExited)
         #mycursor.execute(sql, mysqlVal)
-				print(dt)
+        print(dt)
         #mydb.commit()
         
         client.publish("presence", json.dumps(m1.dictStr()))
