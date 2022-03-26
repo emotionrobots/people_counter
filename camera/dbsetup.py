@@ -24,7 +24,8 @@ mycursor.execute("SHOW TABLES")
 for x in mycursor:
   print(x)
 '''
-
+peopleEntered = 5
+peopleExited = 3
 sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%Y-%m-%d %H:%M:%S, %d, %d)"
 
 mysqlVal = (datetime.now(), peopleEntered, peopleExited)
