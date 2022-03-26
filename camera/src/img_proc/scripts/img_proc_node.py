@@ -154,10 +154,10 @@ def getHistory(msg):
   myresult = mycursor.fetchall()
 
   print(myresult)
-
+  '''
   for x in myresult:
     print(x)  
-
+  '''
   myresult = json.dumps(myresult)
 
   client.publish("history", myresult)
@@ -600,7 +600,7 @@ class ImgProcNode(object):
         m1 = Message("rpi4", 16, "Store entrance", dt, peopleEntered, peopleExited)
 
         mysqlVal = (dt, peopleEntered, peopleExited)
-        mycursor.execute(sql, val)
+        mycursor.execute(sql, mysqlVal)
 
         mydb.commit()
         
