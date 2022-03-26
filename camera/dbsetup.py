@@ -1,4 +1,5 @@
 import mysql.connector
+from datetime import datetime
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -23,6 +24,14 @@ mycursor.execute("SHOW TABLES")
 for x in mycursor:
   print(x)
 '''
+
+sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%Y-%m-%d %H:%M:%S, %d, %d)"
+
+mysqlVal = (now.strftime("%Y-%m-%d %H:%M:%S"), peopleEntered, peopleExited)
+
+mycursor.execute(sql, mysqlVal)
+#print(dt)
+mydb.commit()
 
 mycursor.execute("""
   SELECT time, enterCount, exitCount FROM history 
