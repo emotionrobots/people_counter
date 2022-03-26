@@ -123,7 +123,7 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="emotioneering",
   password="password",
-  databse="history"
+  database="history"
 )
 #time DATETIME, enterCount smallint unsigned, exitCount smallint unsigned
 mycursor = mydb.cursor()
