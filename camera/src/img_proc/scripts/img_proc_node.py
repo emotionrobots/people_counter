@@ -49,11 +49,14 @@ client = mqtt.Client()
 
 def on_connect(client, userdata, flags, rc):
     print("connected to server")
-    client.subscribe("preserve")
+    #client.subscribe("preserve")
+    client.subscribe("history")
 
 def on_message(client, userdata, msg):
     print("Message received-> " + msg.topic + " " + str(msg.payload))
-    
+    if msg.topic == "history" :
+      getHistory(msg.payload)
+
 def getDateTime(now):
     datetime = now.strftime("%Y-%m-%d %H:%M:%S")
     '''
@@ -132,6 +135,32 @@ sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%Y-%m-%d %H:%M:
 #===========================================================================
 def dr_callback(config, level):
   return config
+
+#===========================================================================
+#  retrieves enter/exit history from database and publish to backend
+#===========================================================================
+def getHistory(msg):
+  time = json.loads(msg)
+  beginning = time[0]
+  ending = time[1]
+  mycursor = mydb.cursor()
+
+  mycursor.execute("""
+  SELECT time, enterCount, exitCount FROM history 
+  WHERE time between '%s' and '%s'
+  order by time desc
+  """ %(beginning, ending))
+
+  myresult = mycursor.fetchall()
+
+  print(myresult)
+
+  for x in myresult:
+    print(x)  
+
+  myresult = json.dumps(myresult)
+
+  client.publish("history", myresult)
 
 
 #===========================================================================
@@ -565,7 +594,7 @@ class ImgProcNode(object):
         pass
       peopleEntered = self.tracker.currentEnter
       peopleExited = self.tracker.currentExit
-      # device, deviceid, longtitude, latitude, location, time, enter, exit, people in 		building
+      # device, deviceid, longtitude, latitude, location, time, enter, exit, people in building
       dt = getDateTime(now)
       if not (peopleEntered == 0 and peopleExited == 0):
         m1 = Message("rpi4", 16, "Store entrance", dt, peopleEntered, peopleExited)
