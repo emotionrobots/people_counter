@@ -43,4 +43,5 @@ mycursor.execute("""
 
 myresult = mycursor.fetchall()
 
-print(myresult)
+for x in myresult:
+  print(x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2])
