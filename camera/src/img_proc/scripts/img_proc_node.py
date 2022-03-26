@@ -306,7 +306,7 @@ class ImgProcNode(object):
     alpha = self.learningRateAlpha
     lrMax = self.learningRateMax
     if diff < 96:
-    	eta = diff / 9600.0
+      eta = diff / 9600.0
       lr = alpha / (eta + alpha/lrMax)
     return lr
 
