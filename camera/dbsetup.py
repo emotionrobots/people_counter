@@ -26,7 +26,7 @@ for x in mycursor:
 '''
 peopleEntered = 5
 peopleExited = 3
-sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%Y-%m-%d %H:%M:%S, %s, %s)"
+sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%s, %s, %s)"
 
 mysqlVal = (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), peopleEntered, peopleExited)
 
