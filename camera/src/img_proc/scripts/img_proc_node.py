@@ -128,7 +128,7 @@ mydb = mysql.connector.connect(
 #time DATETIME, enterCount smallint unsigned, exitCount smallint unsigned
 mycursor = mydb.cursor()
 
-sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%Y-%m-%d %H:%M:%S, %d, %d)"
+sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%s, %s, %s)"
 
 #===========================================================================
 #  dynamic_reconfigure callback 
@@ -148,17 +148,20 @@ def getHistory(msg):
   mycursor.execute("""
   SELECT time, enterCount, exitCount FROM history 
   WHERE time between '%s' and '%s'
-  order by time desc
+  order by time asc
   """ %(beginning, ending))
 
   myresult = mycursor.fetchall()
 
-  print(myresult)
-  '''
+  #print(myresult)
+  
+  resultList = []
+
   for x in myresult:
-    print(x)  
-  '''
-  myresult = json.dumps(myresult)
+      listTemp = [x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2]]
+      resultList.append(listTemp)
+  
+  myresult = json.dumps(resultList)
 
   client.publish("history", myresult)
 
@@ -600,9 +603,9 @@ class ImgProcNode(object):
         m1 = Message("rpi4", 16, "Store entrance", dt, peopleEntered, peopleExited)
 
         mysqlVal = (dt, peopleEntered, peopleExited)
-        #mycursor.execute(sql, mysqlVal)
-        print(dt)
-        #mydb.commit()
+        mycursor.execute(sql, mysqlVal)
+        
+        mydb.commit()
         
         client.publish("presence", json.dumps(m1.dictStr()))
         print(m1.dictStr())
