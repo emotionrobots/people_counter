@@ -42,6 +42,7 @@ from tf2_sensor_msgs.tf2_sensor_msgs import do_transform_cloud
 import paho.mqtt.client as mqtt
 import mysql.connector
 from BlobTracker import BlobTracker
+import time
 
 
 node = None
@@ -208,6 +209,13 @@ class ImgProcNode(object):
     # blob tracker
     self.tracker = BlobTracker()
     self.enterExit = []
+
+    # publish timer
+    self.start = time.time()
+
+    # cumulative enter and exit
+    self.cumulativeEnter = 0
+    self.cumulativeExit = 0
 
     # Subscribe to camera data 
     rospy.Subscriber('/espros_tof_cam635/camera/image_raw1', Image, self.amp_callback)
@@ -602,13 +610,22 @@ class ImgProcNode(object):
       if not (peopleEntered == 0 and peopleExited == 0):
         m1 = Message("rpi4", 16, "Store entrance", dt, peopleEntered, peopleExited)
 
+        self.cumulativeEnter += peopleEntered
+        self.cumulativeExit += peopleExited
+
         mysqlVal = (dt, peopleEntered, peopleExited)
         mycursor.execute(sql, mysqlVal)
         
         mydb.commit()
         
-        client.publish("presence", json.dumps(m1.dictStr()))
+        #client.publish("presence", json.dumps(m1.dictStr()))
         print(m1.dictStr())
+    if time.time() - self.start >= 60:
+        if self.cumulativeEnter > 0 or self.cumulativeExit > 0:
+            client.publish("presence", json.dumps([self.cumulativeEnter, self.cumulativeExit]))
+            self.cumulativeEnter = 0
+            self.cumulativeExit = 0
+            self.start = time.time()
 
   #===================================================
   #  Start processing 
