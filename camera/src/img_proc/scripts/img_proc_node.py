@@ -145,26 +145,28 @@ def getHistory(msg):
   beginning = time[0]
   ending = time[1]
   mycursor = mydb.cursor()
+  if datetime.now() - datetime.strptime(beginning,"%Y-%m-%d %H:%M:%S") > 60: #catches error if the request is out of range, need more testing
+    client.publish("history", json.dumps("ERROR_History_Out_Of_Range"))
+  else:
+    mycursor.execute("""
+    SELECT time, enterCount, exitCount FROM history 
+    WHERE time between '%s' and '%s'
+    order by time asc
+    """ %(beginning, ending))
 
-  mycursor.execute("""
-  SELECT time, enterCount, exitCount FROM history 
-  WHERE time between '%s' and '%s'
-  order by time asc
-  """ %(beginning, ending))
+    myresult = mycursor.fetchall()
 
-  myresult = mycursor.fetchall()
+    #print(myresult)
+    
+    resultList = []
 
-  #print(myresult)
-  
-  resultList = []
+    for x in myresult:
+        listTemp = [x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2]]
+        resultList.append(listTemp)
+    
+    myresult = json.dumps(resultList)
 
-  for x in myresult:
-      listTemp = [x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2]]
-      resultList.append(listTemp)
-  
-  myresult = json.dumps(resultList)
-
-  client.publish("history", myresult)
+    client.publish("history", myresult)
 
 
 #===========================================================================
