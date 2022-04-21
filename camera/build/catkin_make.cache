@@ -1,2 +1,2 @@
 espros_tof_cam635:img_proc
--DCATKIN_DEVEL_PREFIX=/home/ubuntu/Software/mzheng/ros/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/Software/mzheng/ros/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/ubuntu/Software/people_counter/camera/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/Software/people_counter/camera/install -G Unix Makefiles

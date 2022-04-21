@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/Software/mzheng/ros/src/img_proc
+# Install script for directory: /home/ubuntu/Software/people_counter/camera/src/img_proc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Software/mzheng/ros/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Software/people_counter/camera/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,37 +38,37 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/img_proc" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/devel/include/img_proc/img_procConfig.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/img_proc" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/devel/include/img_proc/img_procConfig.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/img_proc" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/devel/lib/python3/dist-packages/img_proc/__init__.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/img_proc" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/devel/lib/python3/dist-packages/img_proc/__init__.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ubuntu/Software/mzheng/ros/devel/lib/python3/dist-packages/img_proc/cfg")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ubuntu/Software/people_counter/camera/devel/lib/python3/dist-packages/img_proc/cfg")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/img_proc" TYPE DIRECTORY FILES "/home/ubuntu/Software/mzheng/ros/devel/lib/python3/dist-packages/img_proc/cfg")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/img_proc" TYPE DIRECTORY FILES "/home/ubuntu/Software/people_counter/camera/devel/lib/python3/dist-packages/img_proc/cfg")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/build/img_proc/catkin_generated/installspace/img_proc.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/build/img_proc/catkin_generated/installspace/img_proc.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/img_proc/cmake" TYPE FILE FILES
-    "/home/ubuntu/Software/mzheng/ros/build/img_proc/catkin_generated/installspace/img_procConfig.cmake"
-    "/home/ubuntu/Software/mzheng/ros/build/img_proc/catkin_generated/installspace/img_procConfig-version.cmake"
+    "/home/ubuntu/Software/people_counter/camera/build/img_proc/catkin_generated/installspace/img_procConfig.cmake"
+    "/home/ubuntu/Software/people_counter/camera/build/img_proc/catkin_generated/installspace/img_procConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/img_proc" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/src/img_proc/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/img_proc" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/src/img_proc/package.xml")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/img_proc" TYPE PROGRAM FILES "/home/ubuntu/Software/mzheng/ros/build/img_proc/catkin_generated/installspace/img_proc_node.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/img_proc" TYPE PROGRAM FILES "/home/ubuntu/Software/people_counter/camera/build/img_proc/catkin_generated/installspace/img_proc_node.py")
 endif()
 

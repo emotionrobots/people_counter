@@ -40,7 +40,9 @@ import tf2_ros
 import tf2_py as tf2
 from tf2_sensor_msgs.tf2_sensor_msgs import do_transform_cloud
 import paho.mqtt.client as mqtt
+import mysql.connector
 from BlobTracker import BlobTracker
+import time
 
 
 node = None
@@ -48,13 +50,16 @@ client = mqtt.Client()
 
 def on_connect(client, userdata, flags, rc):
     print("connected to server")
-    client.subscribe("preserve")
+    #client.subscribe("preserve")
+    client.subscribe("history")
 
 def on_message(client, userdata, msg):
     print("Message received-> " + msg.topic + " " + str(msg.payload))
-    
+    if msg.topic == "history" :
+      getHistory(msg.payload)
+
 def getDateTime(now):
-    datetime = now.strftime("%Y/%m/%d %H:%M:%S")
+    datetime = now.strftime("%Y-%m-%d %H:%M:%S")
     '''
     time = format(now.strftime("%H"))
     day = format(now.strftime("%d"))
@@ -113,10 +118,55 @@ class Message:
     return json.dumps(d)
 
 #===========================================================================
+# mysql connector and cursor setup
+#===========================================================================
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="emotioneering",
+  password="password",
+  database="history"
+)
+#time DATETIME, enterCount smallint unsigned, exitCount smallint unsigned
+mycursor = mydb.cursor()
+
+sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%s, %s, %s)"
+
+#===========================================================================
 #  dynamic_reconfigure callback 
 #===========================================================================
 def dr_callback(config, level):
   return config
+
+#===========================================================================
+#  retrieves enter/exit history from database and publish to backend
+#===========================================================================
+def getHistory(msg):
+  time = json.loads(msg)
+  beginning = time[0]
+  ending = time[1]
+  mycursor = mydb.cursor()
+  if datetime.now() - datetime.strptime(beginning,"%Y-%m-%d %H:%M:%S") > 60: #catches error if the request is out of range, need more testing
+    client.publish("history", json.dumps("ERROR_History_Out_Of_Range"))
+  else:
+    mycursor.execute("""
+    SELECT time, enterCount, exitCount FROM history 
+    WHERE time between '%s' and '%s'
+    order by time asc
+    """ %(beginning, ending))
+
+    myresult = mycursor.fetchall()
+
+    #print(myresult)
+    
+    resultList = []
+
+    for x in myresult:
+        listTemp = [x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2]]
+        resultList.append(listTemp)
+    
+    myresult = json.dumps(resultList)
+
+    client.publish("history", myresult)
 
 
 #===========================================================================
@@ -161,6 +211,13 @@ class ImgProcNode(object):
     # blob tracker
     self.tracker = BlobTracker()
     self.enterExit = []
+
+    # publish timer
+    self.start = time.time()
+
+    # cumulative enter and exit
+    self.cumulativeEnter = 0
+    self.cumulativeExit = 0
 
     # Subscribe to camera data 
     rospy.Subscriber('/espros_tof_cam635/camera/image_raw1', Image, self.amp_callback)
@@ -258,12 +315,12 @@ class ImgProcNode(object):
   #  Compute learningRate based on movement
   #===================================================
   def computeLearningRate(self, diff):
-    lr = 0
+    lr = 0.0
     alpha = self.learningRateAlpha
     lrMax = self.learningRateMax
     if diff < 96:
-    	eta = diff / 9600.0
-    	lr = alpha / (eta + alpha/lrMax)
+      eta = diff / 9600.0
+      lr = alpha / (eta + alpha/lrMax)
     return lr
 
   #===================================================
@@ -550,13 +607,27 @@ class ImgProcNode(object):
         pass
       peopleEntered = self.tracker.currentEnter
       peopleExited = self.tracker.currentExit
-      # device, deviceid, longtitude, latitude, location, time, enter, exit, people in 		building
+      # device, deviceid, longtitude, latitude, location, time, enter, exit, people in building
       dt = getDateTime(now)
       if not (peopleEntered == 0 and peopleExited == 0):
         m1 = Message("rpi4", 16, "Store entrance", dt, peopleEntered, peopleExited)
-  
-        client.publish("presence", json.dumps(m1.dictStr()))
+
+        self.cumulativeEnter += peopleEntered
+        self.cumulativeExit += peopleExited
+
+        mysqlVal = (dt, peopleEntered, peopleExited)
+        mycursor.execute(sql, mysqlVal)
+        
+        mydb.commit()
+        
+        #client.publish("presence", json.dumps(m1.dictStr()))
         print(m1.dictStr())
+    if time.time() - self.start >= 60:
+        if self.cumulativeEnter > 0 or self.cumulativeExit > 0:
+            client.publish("presence", json.dumps([self.cumulativeEnter, self.cumulativeExit]))
+            self.cumulativeEnter = 0
+            self.cumulativeExit = 0
+            self.start = time.time()
 
   #===================================================
   #  Start processing 
