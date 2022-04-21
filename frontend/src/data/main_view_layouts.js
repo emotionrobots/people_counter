@@ -103,7 +103,7 @@ export const PROFILE_LAYOUT = {
             column: 1,
             size: {
                 width: 1,
-                height: 2
+                height: 4
             }
         },
         {
@@ -130,9 +130,9 @@ export const PROFILE_LAYOUT = {
             data: 'orgs-horz',
             color: 'ebony-clay',
             row: 4,
-            column: 1,
+            column: 2,
             size: {
-                width: 3,
+                width: 2,
                 height: 2
             }
         },

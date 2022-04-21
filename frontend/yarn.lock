@@ -14487,6 +14487,11 @@
     "string-width" "^4.2.0"
     "strip-ansi" "^6.0.0"
 
+"tailwindcss-writing-mode@^1.0.0":
+  "integrity" "sha512-w72adZDP4aCCut8gJzVp1Z2Ht55JlY1Q0ZgJULeAbCEUCfkHVJS+ZYlfMXOmflIDNqnOsGizgojXxq87R0kh7g=="
+  "resolved" "https://registry.npmjs.org/tailwindcss-writing-mode/-/tailwindcss-writing-mode-1.0.0.tgz"
+  "version" "1.0.0"
+
 "tailwindcss@>=2.0.0", "tailwindcss@npm:@tailwindcss/postcss7-compat@^2.2.4":
   "integrity" "sha512-1QkWUEeLV1AoNipMCE6IlL7XYScGb+DAzaXy35ooMDvl0G8kCMHBNqGxyVAnTcK8gyJNUzkKXExkUnbjAndd/g=="
   "resolved" "https://registry.npmjs.org/@tailwindcss/postcss7-compat/-/postcss7-compat-2.2.7.tgz"

@@ -4,7 +4,8 @@ import Auth from "@aws-amplify/auth";
 let USER_CONTEXT = null
 let USER_TOKEN = null
 let USER_ATTRIBUTES = null
-let link = "http://localhost:3000/api"
+const LINK = "http://localhost:8080"
+const LINK_MAND_ADDON = "/https://pc3-backend.e-motion.ai/api"
 
 const GET_REQ = {
     method: 'GET',
@@ -20,13 +21,18 @@ function objToQueryString(obj) {
 }
 
 function __internal_fetch(link_addon, headers, params, handleError, isJSON, callback) {
+    console.log(LINK)
+    console.log(new URL(LINK_MAND_ADDON + link_addon + (Object.keys(params).length > 0 ? ('?' + objToQueryString(params)) : ''), LINK))
     retrieveUserToken((e) => {
         handleError(e)
     }, () => {
-        if (headers.method === 'GET') {
-            params['tok'] = USER_TOKEN
-        }
-        fetch(new URL(link_addon + (Object.keys(params).length > 0 ? ('?' + objToQueryString(params)) : ''), link))
+        // if (headers.method === 'GET') {
+        //     params['tok'] = USER_TOKEN
+        // }
+        fetch(new URL(LINK_MAND_ADDON + link_addon + (Object.keys(params).length > 0 ? ('?' + objToQueryString(params)) : ''), LINK), {
+            headers: headers
+        })
+        // fetch(link + link_addon)
             .then(res => isJSON ? res.json() : res.text())
             .then(data => callback(data))
             .catch(reason => handleError(reason))
@@ -55,87 +61,99 @@ function retrieveUserToken(errHandler, callback) {
 export function getUserContext(callback) {
     // User profile will write to S3
     // User profile image will be a link referencing the image
+
     retrieveUserToken((e) => { console.log(e) }, () => {
-        USER_CONTEXT = {
-            username: USER_ATTRIBUTES.username,
-            token: '',
-            organizations: {
-                'organizationID0': {
-                    name: 'Yummy',
-                    //desc: 'Delicious area located in the blah blah what if something is too long ehe te nandeyo wowowowowowowooww omg why is this still not long enogh to overfvlow please hurry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi fjoiwaj oiejfj awoij',
-                    desc: 'jifoawiofj',
-                    date_creation: null,
-                    cameraGroups: {
-                        'groupID0': {
-                            name: 'CA',
-                            cameras: [
-                                {
-                                    name: 'cam 1'
-                                },
-                                {
-                                    name: 'backup cam 1',
-                                    desc: 'the best backup camera in the world',
-                                    date_creation: '12/01/2009 18:21'
-                                },
-                                {
-                                    name: 'trooper 1',
-                                    desc: 'an absolute beast of a camera',
-                                    date_creation: '06/20/2004 06:21'
-                                }
-                            ]
-                        },
-                        'groupID1': {
-                            name: 'CA1',
-                            cameras: [
-                                {
-                                    name: 'cam 2'
-                                }
-                            ]
-                        },
-                        'groupID2': {
-                            name: 'CA2',
-                            cameras: [
-                                {
-                                    name: 'cam 3'
-                                }
-                            ]
-                        },
-                        'groupID3': {
-                            name: 'CA3',
-                            cameras: [
-                                {
-                                    name: 'cam 4'
-                                }
-                            ]
-                        },
-                    }
+    __internal_fetch('/get_user_orgs',
+                GET_REQ,
+                {},
+                reason => {
+                    console.log(reason);
+                    callback("Error")
                 },
-                'organizationID1': {
-                    name: 'Clements',
-                    date_creation: null,
-                    cameraGroups: {
-                        'groupID0': {
-                            name: 'Classroom A',
-                            cameras: [
-                                {
-                                    name: 'cam 5'
-                                }
-                            ]
-                        },
-                        'groupID1': {
-                            name: 'Classroom B',
-                            cameras: [
-                                {
-                                    name: 'cam 6'
-                                }
-                            ]
-                        },
-                    }
-                }
-            }
-        };
-        callback(USER_CONTEXT)
-    })
+                true,
+                (data) => {
+                        USER_CONTEXT = {
+                            username: USER_ATTRIBUTES.username,
+                            token: '',
+                            organizations: data
+                            // organizations: {
+                            //     'organizationID0': {
+                            //         name: 'Yummy',
+                            //         //desc: 'Delicious area located in the blah blah what if something is too long ehe te nandeyo wowowowowowowooww omg why is this still not long enogh to overfvlow please hurry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi fjoiwaj oiejfj awoij',
+                            //         desc: 'jifoawiofj',
+                            //         date_creation: null,
+                            //         cameraGroups: {
+                            //             'groupID0': {
+                            //                 name: 'CA',
+                            //                 cameras: [
+                            //                     {
+                            //                         name: 'cam 1'
+                            //                     },
+                            //                     {
+                            //                         name: 'backup cam 1',
+                            //                         desc: 'the best backup camera in the world',
+                            //                         date_creation: '12/01/2009 18:21'
+                            //                     },
+                            //                     {
+                            //                         name: 'trooper 1',
+                            //                         desc: 'an absolute beast of a camera',
+                            //                         date_creation: '06/20/2004 06:21'
+                            //                     }
+                            //                 ]
+                            //             },
+                            //             'groupID1': {
+                            //                 name: 'CA1',
+                            //                 cameras: [
+                            //                     {
+                            //                         name: 'cam 2'
+                            //                     }
+                            //                 ]
+                            //             },
+                            //             'groupID2': {
+                            //                 name: 'CA2',
+                            //                 cameras: [
+                            //                     {
+                            //                         name: 'cam 3'
+                            //                     }
+                            //                 ]
+                            //             },
+                            //             'groupID3': {
+                            //                 name: 'CA3',
+                            //                 cameras: [
+                            //                     {
+                            //                         name: 'cam 4'
+                            //                     }
+                            //                 ]
+                            //             },
+                            //         }
+                            //     },
+                            //     'organizationID1': {
+                            //         name: 'Clements',
+                            //         date_creation: null,
+                            //         cameraGroups: {
+                            //             'groupID0': {
+                            //                 name: 'Classroom A',
+                            //                 cameras: [
+                            //                     {
+                            //                         name: 'cam 5'
+                            //                     }
+                            //                 ]
+                            //             },
+                            //             'groupID1': {
+                            //                 name: 'Classroom B',
+                            //                 cameras: [
+                            //                     {
+                            //                         name: 'cam 6'
+                            //                     }
+                            //                 ]
+                            //             },
+                            //         }
+                            //     }
+                            // }
+                        };
+                        callback(USER_CONTEXT)
+                    })
+                })
 }
 
 /**
@@ -171,23 +189,17 @@ export function getOrganizations(callback) {
 export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
     switch (data) {
         case 'numOccupancy':
-            __internal_fetch('/update_counter',
+            __internal_fetch('/get_occupancy',
                 GET_REQ,
                 {},
                 reason => {
                     console.log(reason);
                     callback("Error")
                 },
-                false,
+                true,
                 (data) => {
-                    if(data.length > 10) data = 'Overflow'
-                    callback({
-                        cardType: InfoWidgetTypes.SINGLE,
-                        attributes: {
-                            data: data + " People in the Room",
-                            icon: "human"
-                        }
-                    })
+                    console.log(data)
+                    callback(data)
                 })
             break;
         case 'graphReport':
@@ -199,13 +211,18 @@ export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
             })
             break;
         case 'numEntered':
-            callback({
-                cardType: InfoWidgetTypes.SINGLE,
-                attributes: {
-                    data: 21 + " People Entered in the Past Hour",
-                    icon: "enter"
-                }
-            })
+            __internal_fetch('/get_hourly_poschange',
+                GET_REQ,
+                {},
+                reason => {
+                    console.log(reason);
+                    callback("Error")
+                },
+                true,
+                (data) => {
+                    console.log(data)
+                    callback(data)
+                })
             break;
         case 'numLeft':
             callback({
