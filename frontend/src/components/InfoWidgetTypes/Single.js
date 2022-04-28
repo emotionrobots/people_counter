@@ -22,7 +22,7 @@ function Single(props) {
         // <div className='flex relative flex-col h-full'>
         //     <RefreshIcon className='flex absolute top-2 right-2 h-5 w-5 text-9xl text-white font-bold'></RefreshIcon>
             <div className='flex flex-row h-full justify-center items-center pl-6 pr-3'>
-                <p className='text-white text-4xl font-bold'>{props.data.data}</p>
+                <p className='text-white text-4xl font-bold mr-2'>{props.data.data}</p>
                 {findIcon(props.data.icon)}
             </div>
         // </div>

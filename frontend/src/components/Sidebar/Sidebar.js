@@ -15,6 +15,9 @@ function Sidebar() {
     let userContext = useContext(UserContext)
 
     let orgNames = getNamesOfOrgs(userContext.organizations)
+    if (orgNames === undefined) {
+        orgNames = []
+    }
 
     return (
         <div className="h-full relative w-64 p-6 mr-4 rounded-3xl bg-gradient-to-b from-pink-500 to-purple-700">
@@ -26,22 +29,24 @@ function Sidebar() {
             <Link to={'/profile'}><NavItem icon={UserIcon} desc="Profile"></NavItem></Link>
             <hr className="mt-6 mb-4 border-0 text-white bg-white h-1"></hr>
             <div className='flex flex-col h-3/6 overflow-auto'>
-                <Dropdown options={orgNames} selected={state.currentSelectedCamGroup[0]} onChange={
+                <Dropdown options={orgNames.length > 0 ? orgNames : ["No Organizations"]} selected={state.currentSelectedCamGroup[0]} onChange={
                     (e) => {
                         e.preventDefault()
-                        dispatch({
-                            type: 'switch_cam_group', camGroup: [orgNames.indexOf(e.target.value), 0]
-                        })
+                        if (orgNames.length > 0) {
+                            dispatch({
+                                type: 'switch_cam_group', camGroup: [orgNames.indexOf(e.target.value), 0]
+                            })
+                        }
                     }
                 }></Dropdown>
                 {
                     // Map through the selected organization
-                    getNamesOfCamGroups(Object.values(userContext.organizations)[state.currentSelectedCamGroup[0]]).map((val, ind) => {
+                    orgNames.length > 0 ? getNamesOfCamGroups(Object.values(userContext.organizations)[state.currentSelectedCamGroup[0]]).map((val, ind) => {
                         return <CameraGroup key={ind} id={'camgroupid' + ind} ind={ind} selected={ind === state.currentSelectedCamGroup[1]} camGroup={val.name} onClick={(e) => {
                             e.preventDefault()
                             dispatch({ type: 'switch_cam_group', camGroup: [state.currentSelectedCamGroup[0], ind] })
                         }} />
-                    })
+                    }) : null
                 }
             </div>
             <button

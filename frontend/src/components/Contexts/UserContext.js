@@ -2,26 +2,9 @@ import React from 'react';
 
 export const UserContext = React.createContext(
     {
-        username: 'Tester',
+        username: '',
         token: '',
-        organizations: {
-            'organizationID0' : {
-                name: 'Yummy',
-                cameraGroups: {
-                    'groupID0' : 'CA',
-                    'groupID1' : 'CA1',
-                    'groupID2' : 'CA2',
-                    'groupID3' : 'CA3',
-                }
-            },
-            'organizationID1' : {
-                name: 'Clements',
-                cameraGroups: {
-                    'groupID0' : 'Classroom A',
-                    'groupID1' : 'Classroom B',
-                }
-            }
-        }
+        organizations: {}
     }
 )
 
@@ -33,6 +16,15 @@ export const UserContext = React.createContext(
  */
 export function getNamesOfOrgs(orgsContext){
     let orgNames = []
+
+    if(orgsContext === undefined) {
+        return [];
+    }
+
+    if(Object.keys(orgsContext).length <= 0){
+        return [];
+    }
+
     Object.values(orgsContext).forEach((val) => {
         orgNames.push(val.name)
     })

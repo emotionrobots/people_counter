@@ -4,12 +4,15 @@ import Auth from "@aws-amplify/auth";
 let USER_CONTEXT = null
 let USER_TOKEN = null
 let USER_ATTRIBUTES = null
-const LINK = "http://localhost:8080"
-const LINK_MAND_ADDON = "/https://pc3-backend.e-motion.ai/api"
+const LINK = "http://localhost:3000"
+const LINK_MAND_ADDON = ""
 
-const GET_REQ = {
-    method: 'GET',
-    headers: { 'Content-Type': 'plain/text', 'X-Requested-With': 'XMLHttpRequest' },
+const POST_REQ = {
+    method: 'POST',
+    headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+     },
 };
 
 function objToQueryString(obj) {
@@ -20,19 +23,18 @@ function objToQueryString(obj) {
     return keyValuePairs.join('&');
 }
 
-function __internal_fetch(link_addon, headers, params, handleError, isJSON, callback) {
-    console.log(LINK)
-    console.log(new URL(LINK_MAND_ADDON + link_addon + (Object.keys(params).length > 0 ? ('?' + objToQueryString(params)) : ''), LINK))
+function __internal_fetch(link_addon, headers, body, handleError, isJSON, callback) {
+    console.log(new URL(LINK_MAND_ADDON + link_addon + (Object.keys(body).length > 0 ? ('?' + objToQueryString(body)) : ''), LINK))
     retrieveUserToken((e) => {
         handleError(e)
     }, () => {
-        // if (headers.method === 'GET') {
-        //     params['tok'] = USER_TOKEN
-        // }
-        fetch(new URL(LINK_MAND_ADDON + link_addon + (Object.keys(params).length > 0 ? ('?' + objToQueryString(params)) : ''), LINK), {
-            headers: headers
+        console.log(USER_TOKEN)
+        body['token'] = USER_TOKEN
+        fetch(new URL(LINK_MAND_ADDON + link_addon, LINK), {
+            headers: headers.headers,
+            method: headers.method,
+            body: JSON.stringify(body),
         })
-        // fetch(link + link_addon)
             .then(res => isJSON ? res.json() : res.text())
             .then(data => callback(data))
             .catch(reason => handleError(reason))
@@ -64,17 +66,24 @@ export function getUserContext(callback) {
 
     retrieveUserToken((e) => { console.log(e) }, () => {
     __internal_fetch('/get_user_orgs',
-                GET_REQ,
+                POST_REQ,
                 {},
                 reason => {
                     console.log(reason);
-                    callback("Error")
+                    USER_CONTEXT = {
+                        username: USER_ATTRIBUTES.username,
+                        token: '',
+                        error: 1,
+                        organizations: {}
+                    }
+                    callback(USER_CONTEXT)
                 },
                 true,
                 (data) => {
                         USER_CONTEXT = {
                             username: USER_ATTRIBUTES.username,
                             token: '',
+                            error: 0,
                             organizations: data
                             // organizations: {
                             //     'organizationID0': {
@@ -157,23 +166,6 @@ export function getUserContext(callback) {
 }
 
 /**
- * Retrieves the username of the current user as a plain text.
- * @param {function(string)} callback Returns the data to this function after fetched. 
- */
-export function getUsername(callback) {
-    //TODO: Communicate with MQTT servers
-    __internal_fetch('',
-        GET_REQ,
-        {},
-        reason => {
-            console.log(reason);
-            callback("Error")
-        },
-        false,
-        callback)
-}
-
-/**
  * Retrieves the organizations under this account in an array format.
  * @param {function(string)} callback Returns the data to this function after fetched. 
  */
@@ -190,7 +182,7 @@ export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
     switch (data) {
         case 'numOccupancy':
             __internal_fetch('/get_occupancy',
-                GET_REQ,
+                POST_REQ,
                 {},
                 reason => {
                     console.log(reason);
@@ -212,7 +204,7 @@ export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
             break;
         case 'numEntered':
             __internal_fetch('/get_hourly_poschange',
-                GET_REQ,
+                POST_REQ,
                 {},
                 reason => {
                     console.log(reason);
@@ -225,13 +217,18 @@ export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
                 })
             break;
         case 'numLeft':
-            callback({
-                cardType: InfoWidgetTypes.SINGLE,
-                attributes: {
-                    data: 18 + " People Left in the Past Hour",
-                    icon: "exit"
-                }
-            })
+            __internal_fetch('/get_hourly_negchange',
+                POST_REQ,
+                {},
+                reason => {
+                    console.log(reason);
+                    callback("Error")
+                },
+                true,
+                (data) => {
+                    console.log(data)
+                    callback(data)
+                })
             break;
         case 'myUserInfo':
             /**
@@ -296,7 +293,7 @@ export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
             callback({
                 cardType: InfoWidgetTypes.SINGLE,
                 attributes: {
-                    data: 'test',
+                    data: USER_ATTRIBUTES.username,
                     icon: "profile"
                 }
             })
