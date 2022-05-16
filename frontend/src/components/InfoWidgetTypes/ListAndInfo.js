@@ -156,6 +156,12 @@ function ListAndInfo(props) {
 
     let updatedSelectedCam = camSelected;
 
+    if(Object.keys(usrContext.organizations).length == 0){
+        return <div className="flex h-full w-full p-5 justify-center items-center text-center text-white font-bold text-lg">
+            No Cameras Linked to Account
+        </div>
+    }
+
     if(props.data >= 2){
         //TODO: GET RID OF DUPLICATE
         let USER_CONTEXT_ORGS = Object.values(usrContext.organizations)[state.currentSelectedCamGroup[0]];

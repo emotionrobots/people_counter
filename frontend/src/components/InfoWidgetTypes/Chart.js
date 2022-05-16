@@ -1,16 +1,11 @@
-import { React, useState, createRef, useRef } from 'react'
+import { React, useState, createRef, useRef, useContext, useEffect } from 'react'
 import { VscSettings, VscSettingsGear } from 'react-icons/vsc'
-import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, BarChart, Bar } from 'recharts'
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area } from 'recharts'
 import DatePicker from 'react-datepicker'
 import SettingsModal from '../Modals/SettingsModal'
 import { createPortal } from 'react-dom'
-
-const DEBUG_DATA = [
-    { name: '1:00', personExit: 2, personEnter: 5, peopleInside: 4 },
-    { name: '2:00', personExit: 5, personEnter: 8, peopleInside: 6 },
-    { name: '3:00', personExit: 7, personEnter: 6, peopleInside: 4 },
-    { name: '4:00', personExit: 4, personEnter: 9, peopleInside: 3 },
-]
+import { StateContext } from '../Contexts/StateContext'
+import { get_history } from '../../data/user_data'
 
 const KEYS = {
     'personExit': '# of people exited',
@@ -46,6 +41,27 @@ export default function Chart(props) {
     const [endDate, setEndDate] = useState(new Date().setMonth(startDate.getMonth() + 1))
     const checkboxRefs = useRef([]);
 
+    const [global_state,] = useContext(StateContext);
+    const [state, setState] = useState()
+
+    const retrieve_history = () => {
+        get_history(startDate, endDate, (ret) => {
+            if(ret === "Error") {
+                setState({
+                    message: "Error retrieving history"
+                })
+            } else {
+                setState(ret)
+            }
+        }, global_state.currentSelectedCamGroup)
+    }
+
+    useEffect(retrieve_history, [
+        startDate,
+        endDate,
+        global_state.currentSelectedCamGroup
+    ])
+
     if (checkboxRefs.current.length !== checkedYAxis.length) {
         // add or remove refs
         checkboxRefs.current = Array(checkedYAxis.length).fill().map((_, i) => checkboxRefs.current[i] || createRef());
@@ -57,12 +73,12 @@ export default function Chart(props) {
                 <div className='font-bold text-white text-xl'>Data Configuration</div>
             </div> */}
             <ResponsiveContainer>
-                <BarChart data={DEBUG_DATA} margin={{ top: 5, right: 10, bottom: 0, left: -35 }}>
-                    {/* <defs>
+                <AreaChart data={state} margin={{ top: 5, right: -10, bottom: 0, left: -20 }}>
+                    <defs>
                         {
                             checkedYAxis.map((val, ind) => {
                                 if (val)
-                                    return <linearGradient key={ind} id={Object.keys(KEYS)[ind] + 'color'} x1="0" y1="0" x2="0" y2="1">
+                                    return <linearGradient key={ind} id={'color' + Object.keys(KEYS)[ind]} x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor={GRAPH_COLORS[ind]} stopOpacity={0.8} />
                                         <stop offset="95%" stopColor={GRAPH_COLORS[ind]} stopOpacity={0} />
                                     </linearGradient>
@@ -70,7 +86,7 @@ export default function Chart(props) {
                                     return <div key={ind} />
                             })
                         }
-                    </defs> */}
+                    </defs>
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Legend />
@@ -79,12 +95,12 @@ export default function Chart(props) {
                     {
                         checkedYAxis.map((val, ind) => {
                             if (val)
-                                return <Bar key={ind} name={Object.values(KEYS)[ind]} dataKey={Object.keys(KEYS)[ind]} fill={GRAPH_COLORS[ind % GRAPH_COLORS.length]} />
+                                return <Area type="monotone" key={ind} name={Object.values(KEYS)[ind]} dataKey={Object.keys(KEYS)[ind]} stroke={GRAPH_COLORS[ind]} strokeWidth={3} fill={'url(#color' + Object.keys(KEYS)[ind] + ')'} />
                             else
                                 return <div key={ind} />
                         })
                     }
-                </BarChart>
+                </AreaChart>
             </ResponsiveContainer>
             <div className='p-1 absolute bottom-2 right-2 text-white text-xl font-bold rounded-md hover:bg-blue-400' onClick={() => {
                 setShowChartConfigModal(true)
