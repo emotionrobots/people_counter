@@ -51,12 +51,13 @@ client = mqtt.Client()
 def on_connect(client, userdata, flags, rc):
     print("connected to server")
     #client.subscribe("preserve")
-    client.subscribe("history")
+    client.subscribe("/history")
 
 def on_message(client, userdata, msg):
     print("Message received-> " + msg.topic + " " + str(msg.payload))
-    if msg.topic == "history" :
-      getHistory(msg.payload)
+    if msg.topic == "/history" :
+      if msg.payload == "get history":
+        getHistory(msg.payload)
 
 def getDateTime(now):
     datetime = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -141,6 +142,9 @@ def dr_callback(config, level):
 #  retrieves enter/exit history from database and publish to backend
 #===========================================================================
 def getHistory(msg):
+  mycursor.execute("""SELECT ALL""")
+
+  '''
   time = json.loads(msg)
   beginning = time[0]
   ending = time[1]
@@ -153,20 +157,24 @@ def getHistory(msg):
     WHERE time between '%s' and '%s'
     order by time asc
     """ %(beginning, ending))
+  '''
+  myresult = mycursor.fetchall()
 
-    myresult = mycursor.fetchall()
+  #print(myresult)
+  
+  resultList = []
 
-    #print(myresult)
+  for x in myresult:
+      listTemp = [x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2]]
+      resultList.append(listTemp)
+  
+  myresult = json.dumps(resultList)
+
+  client.publish("/history", myresult)
+
+  mycursor.execute("""DELETE ALL""")
+
     
-    resultList = []
-
-    for x in myresult:
-        listTemp = [x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2]]
-        resultList.append(listTemp)
-    
-    myresult = json.dumps(resultList)
-
-    client.publish("history", myresult)
 
 
 #===========================================================================
@@ -526,6 +534,12 @@ class ImgProcNode(object):
   #  Periodic call to refresh image and compute fg&bg and such
   #===================================================
   def periodic(self):
+
+    rowCount = cursor.execute("SELECT COUNT(*) FROM history").split[0]
+    if rowCount >= 200:
+      getHistory()
+
+
     dimg = self.camera['depth']
     aimg = self.camera['amp']
     zpoints = self.camera['z']
@@ -591,7 +605,7 @@ class ImgProcNode(object):
       tracked_blobs = len(self.tracker.matchedPairs)
       if tracked_blobs != self.peopleInFrame:
         dt, time, day, month, year, weekday = getDateTime(now)
-        m1 = Message("rpi4", 16, 455, 566, "Store entrance", dt, time, day, month, year, weekday, 			      tracked_blobs, tracked_blobs)
+        m1 = Message("rpi4", 16, 455, 566, "Store entrance", dt, time, day, month, year, weekday, tracked_blobs, tracked_blobs)
         print("people in frame", tracked_blobs)
         self.peopleInFrame = tracked_blobs
         print(m1.dictStr())
@@ -622,12 +636,14 @@ class ImgProcNode(object):
         
         #client.publish("presence", json.dumps(m1.dictStr()))
         print(m1.dictStr())
+    '''
     if time.time() - self.start >= 60:
         if self.cumulativeEnter > 0 or self.cumulativeExit > 0:
             client.publish("presence", json.dumps([self.cumulativeEnter, self.cumulativeExit]))
             self.cumulativeEnter = 0
             self.cumulativeExit = 0
             self.start = time.time()
+    '''
 
   #===================================================
   #  Start processing 
