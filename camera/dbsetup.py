@@ -46,12 +46,16 @@ for x in mycursor:
 #===========================================================================
 # creates autodelete event that reruns everyday delete rows older than 60 days
 #===========================================================================
+mycursor.execute("DROP EVENT AutoDeleteOldNotifications")
+
+'''
 mycursor.execute("""
 CREATE EVENT AutoDeleteOldNotifications
 ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 DAY 
 ON COMPLETION PRESERVE
 DO 
 DELETE LOW_PRIORITY FROM history WHERE time < DATE_SUB(NOW(), INTERVAL 60 DAY)""")
+'''
 
 #===========================================================================
 # manually adds entries for testing
