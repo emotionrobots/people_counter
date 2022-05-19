@@ -142,7 +142,7 @@ def dr_callback(config, level):
 #  retrieves enter/exit history from database and publish to backend
 #===========================================================================
 def getHistory(msg):
-  mycursor.execute("""SELECT ALL""")
+  mycursor.execute("SELECT * FROM history")
 
   '''
   time = json.loads(msg)
@@ -172,7 +172,7 @@ def getHistory(msg):
 
   client.publish("/history", myresult)
 
-  mycursor.execute("""DELETE ALL""")
+  mycursor.execute("DELETE FROM history")
 
     
 
