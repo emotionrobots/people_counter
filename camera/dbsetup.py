@@ -46,7 +46,10 @@ for x in mycursor:
 #===========================================================================
 # creates autodelete event that reruns everyday delete rows older than 60 days
 #===========================================================================
-mycursor.execute("DROP EVENT AutoDeleteOldNotifications")
+print(mycursor.execute("SHOW EVENTS"))
+print(mycursor.fetchall())
+
+#mycursor.execute("DROP EVENT AutoDeleteOldNotifications")
 
 '''
 mycursor.execute("""
