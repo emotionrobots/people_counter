@@ -7,6 +7,12 @@ function SubPage(props) {
     let userContext = useContext(UserContext)
     let layout = props.layout || DASHBOARD_LAYOUT
 
+    if(Object.values(userContext.organizations).length === 0 && layout === DASHBOARD_LAYOUT) {
+        return <div className='flex h-full w-full p-5 justify-center items-center text-center text-white font-bold text-xl'>
+            No camera information can be displayed since you have not linked a camera to your account yet.
+        </div>
+    }
+
     return (
         (userContext.error !== undefined && userContext.error === 0) ? <div className={"h-full w-full grid grid-flow-col grid-rows-" + layout.rows + " grid-cols-" + layout.cols + " gap-4"}>
             {layout.layout.map((val, index) =>

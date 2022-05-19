@@ -72,7 +72,7 @@ export default function MainPage() {
   const [state, dispatch] = useReducer(GlobalAppReducer, initialState)
 
   useEffect(() => {
-    getUserContext((ret) => {
+    getUserContext(async (ret) => {
       setUserContext(ret)
     })
   }, [])

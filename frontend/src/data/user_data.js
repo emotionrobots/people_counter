@@ -4,8 +4,8 @@ import Auth from "@aws-amplify/auth";
 let USER_CONTEXT = null
 let USER_TOKEN = null
 let USER_ATTRIBUTES = null
-const LINK = "http://localhost:3000"
-const LINK_MAND_ADDON = ""
+const LINK = "https://ec2-18-116-239-39.us-east-2.compute.amazonaws.com/"
+const LINK_MAND_ADDON = "api"
 
 const POST_REQ = {
     method: 'POST',
@@ -80,102 +80,35 @@ export function getUserContext(callback) {
                 },
                 true,
                 (data) => {
+                    console.log(data)
                         USER_CONTEXT = {
                             username: USER_ATTRIBUTES.username,
                             token: '',
                             error: 0,
                             organizations: data
-                            // organizations: {
-                            //     'organizationID0': {
-                            //         name: 'Yummy',
-                            //         //desc: 'Delicious area located in the blah blah what if something is too long ehe te nandeyo wowowowowowowooww omg why is this still not long enogh to overfvlow please hurry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi furry up whyyyyyyy fjewioafj eiwfowjf weoifj eowi fjoiwaj oiejfj awoij',
-                            //         desc: 'jifoawiofj',
-                            //         date_creation: null,
-                            //         cameraGroups: {
-                            //             'groupID0': {
-                            //                 name: 'CA',
-                            //                 cameras: [
-                            //                     {
-                            //                         name: 'cam 1'
-                            //                     },
-                            //                     {
-                            //                         name: 'backup cam 1',
-                            //                         desc: 'the best backup camera in the world',
-                            //                         date_creation: '12/01/2009 18:21'
-                            //                     },
-                            //                     {
-                            //                         name: 'trooper 1',
-                            //                         desc: 'an absolute beast of a camera',
-                            //                         date_creation: '06/20/2004 06:21'
-                            //                     }
-                            //                 ]
-                            //             },
-                            //             'groupID1': {
-                            //                 name: 'CA1',
-                            //                 cameras: [
-                            //                     {
-                            //                         name: 'cam 2'
-                            //                     }
-                            //                 ]
-                            //             },
-                            //             'groupID2': {
-                            //                 name: 'CA2',
-                            //                 cameras: [
-                            //                     {
-                            //                         name: 'cam 3'
-                            //                     }
-                            //                 ]
-                            //             },
-                            //             'groupID3': {
-                            //                 name: 'CA3',
-                            //                 cameras: [
-                            //                     {
-                            //                         name: 'cam 4'
-                            //                     }
-                            //                 ]
-                            //             },
-                            //         }
-                            //     },
-                            //     'organizationID1': {
-                            //         name: 'Clements',
-                            //         date_creation: null,
-                            //         cameraGroups: {
-                            //             'groupID0': {
-                            //                 name: 'Classroom A',
-                            //                 cameras: [
-                            //                     {
-                            //                         name: 'cam 5'
-                            //                     }
-                            //                 ]
-                            //             },
-                            //             'groupID1': {
-                            //                 name: 'Classroom B',
-                            //                 cameras: [
-                            //                     {
-                            //                         name: 'cam 6'
-                            //                     }
-                            //                 ]
-                            //             },
-                            //         }
-                            //     }
-                            // }
                         };
                         callback(USER_CONTEXT)
                     })
                 })
 }
 
-/**
- * Retrieves the organizations under this account in an array format.
- * @param {function(string)} callback Returns the data to this function after fetched. 
- */
-export function getOrganizations(callback) {
-    return [
-        "My Groups",
-        "Yummy",
-        "Clements",
-        "New One"
-    ]
+export function get_history(start, end, callback, currentSelectedCamera){
+    __internal_fetch('/get_history',
+    POST_REQ,
+    {
+        start: start,
+        end: end,
+        room_id: Object.keys(Object.values(USER_CONTEXT.organizations)[currentSelectedCamera[0]].cameraGroups)[currentSelectedCamera[1]]
+    },
+    reason => {
+        console.log(reason);
+        callback("Error")
+    },
+    true,
+    (data) => {
+        console.log(data)
+        callback(data)
+    })
 }
 
 export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
@@ -183,7 +116,7 @@ export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
         case 'numOccupancy':
             __internal_fetch('/get_occupancy',
                 POST_REQ,
-                {},
+                {room_id: Object.keys(Object.values(USER_CONTEXT.organizations)[currentSelectedCamera[0]].cameraGroups)[currentSelectedCamera[1]]},
                 reason => {
                     console.log(reason);
                     callback("Error")
