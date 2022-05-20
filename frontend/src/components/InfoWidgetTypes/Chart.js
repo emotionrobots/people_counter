@@ -37,15 +37,15 @@ const getInitialArrayOfLen = (len) => {
 export default function Chart(props) {
     const [showChartConfigModal, setShowChartConfigModal] = useState(false)
     const [checkedYAxis, setCheckedYAxis] = useState(getInitialArrayOfLen(Object.keys(KEYS).length))
-    const [startDate, setStartDate] = useState(new Date())
-    const [endDate, setEndDate] = useState(new Date().setMonth(startDate.getMonth() + 1))
+    const [startDate, setStartDate] = useState(new Date(new Date().setUTCDate(new Date().getUTCDate() - 1)))
+    const [endDate, setEndDate] = useState(new Date())
     const checkboxRefs = useRef([]);
 
     const [global_state,] = useContext(StateContext);
     const [state, setState] = useState()
 
     const retrieve_history = () => {
-        get_history(startDate, endDate, (ret) => {
+        get_history(new Date(startDate.setUTCHours(0, 0, 0, 0)).toISOString(), new Date(endDate.setUTCHours(23, 59, 59, 999)).toISOString(), (ret) => {
             if(ret === "Error") {
                 setState({
                     message: "Error retrieving history"

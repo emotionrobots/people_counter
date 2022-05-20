@@ -4,7 +4,7 @@ import Auth from "@aws-amplify/auth";
 let USER_CONTEXT = null
 let USER_TOKEN = null
 let USER_ATTRIBUTES = null
-const LINK = "https://ec2-18-116-239-39.us-east-2.compute.amazonaws.com/"
+const LINK = "https://ec2-52-14-188-10.us-east-2.compute.amazonaws.com/"
 const LINK_MAND_ADDON = "api"
 
 const POST_REQ = {
@@ -28,7 +28,7 @@ function __internal_fetch(link_addon, headers, body, handleError, isJSON, callba
     retrieveUserToken((e) => {
         handleError(e)
     }, () => {
-        console.log(USER_TOKEN)
+        console.log(body)
         body['token'] = USER_TOKEN
         fetch(new URL(LINK_MAND_ADDON + link_addon, LINK), {
             headers: headers.headers,
@@ -138,7 +138,7 @@ export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
         case 'numEntered':
             __internal_fetch('/get_hourly_poschange',
                 POST_REQ,
-                {},
+                {room_id: Object.keys(Object.values(USER_CONTEXT.organizations)[currentSelectedCamera[0]].cameraGroups)[currentSelectedCamera[1]]},
                 reason => {
                     console.log(reason);
                     callback("Error")
@@ -152,7 +152,7 @@ export function getInfoWidget(data, callback, currentSelectedCamera = [0, 0]) {
         case 'numLeft':
             __internal_fetch('/get_hourly_negchange',
                 POST_REQ,
-                {},
+                {room_id: Object.keys(Object.values(USER_CONTEXT.organizations)[currentSelectedCamera[0]].cameraGroups)[currentSelectedCamera[1]]},
                 reason => {
                     console.log(reason);
                     callback("Error")
