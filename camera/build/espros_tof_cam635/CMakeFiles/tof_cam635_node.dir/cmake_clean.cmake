@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/Software/mzheng/ros/devel/lib/espros_tof_cam635/tof_cam635_node"
-  "/home/ubuntu/Software/mzheng/ros/devel/lib/espros_tof_cam635/tof_cam635_node.pdb"
+  "/home/ubuntu/Software/people_counter/camera/devel/lib/espros_tof_cam635/tof_cam635_node"
+  "/home/ubuntu/Software/people_counter/camera/devel/lib/espros_tof_cam635/tof_cam635_node.pdb"
   "CMakeFiles/tof_cam635_node.dir/src/camera635_driver.cpp.o"
   "CMakeFiles/tof_cam635_node.dir/src/communication/blocking_command_helper.cpp.o"
   "CMakeFiles/tof_cam635_node.dir/src/communication/chip_information_helper.cpp.o"

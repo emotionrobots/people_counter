@@ -7,4 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/ubuntu/Software/mzheng/ros/build'
+export PWD='/home/ubuntu/Software/people_counter/camera/build'

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ubuntu/Software/mzheng/ros/src
+CMAKE_SOURCE_DIR = /home/ubuntu/Software/people_counter/camera/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ubuntu/Software/mzheng/ros/build
+CMAKE_BINARY_DIR = /home/ubuntu/Software/people_counter/camera/build
 
 # Utility rule file for doxygen.
 
@@ -67,6 +67,6 @@ CMakeFiles/doxygen.dir/clean:
 .PHONY : CMakeFiles/doxygen.dir/clean
 
 CMakeFiles/doxygen.dir/depend:
-	cd /home/ubuntu/Software/mzheng/ros/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/Software/mzheng/ros/src /home/ubuntu/Software/mzheng/ros/src /home/ubuntu/Software/mzheng/ros/build /home/ubuntu/Software/mzheng/ros/build /home/ubuntu/Software/mzheng/ros/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/ubuntu/Software/people_counter/camera/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/Software/people_counter/camera/src /home/ubuntu/Software/people_counter/camera/src /home/ubuntu/Software/people_counter/camera/build /home/ubuntu/Software/people_counter/camera/build /home/ubuntu/Software/people_counter/camera/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/doxygen.dir/depend
 

@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/Software/mzheng/ros/install
+prefix=/home/ubuntu/Software/people_counter/camera/install
 
 Name: espros_tof_cam635
 Description: Description of espros_tof_cam635

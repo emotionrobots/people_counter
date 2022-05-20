@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/Software/mzheng/ros/src/espros_tof_cam635
+# Install script for directory: /home/ubuntu/Software/people_counter/camera/src/espros_tof_cam635
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Software/mzheng/ros/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Software/people_counter/camera/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,34 +38,34 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/espros_tof_cam635" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/devel/include/espros_tof_cam635/espros_tof_cam635Config.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/espros_tof_cam635" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/devel/include/espros_tof_cam635/espros_tof_cam635Config.h")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/espros_tof_cam635" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/devel/lib/python3/dist-packages/espros_tof_cam635/__init__.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/espros_tof_cam635" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/devel/lib/python3/dist-packages/espros_tof_cam635/__init__.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ubuntu/Software/mzheng/ros/devel/lib/python3/dist-packages/espros_tof_cam635/cfg")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ubuntu/Software/people_counter/camera/devel/lib/python3/dist-packages/espros_tof_cam635/cfg")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/espros_tof_cam635" TYPE DIRECTORY FILES "/home/ubuntu/Software/mzheng/ros/devel/lib/python3/dist-packages/espros_tof_cam635/cfg")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/espros_tof_cam635" TYPE DIRECTORY FILES "/home/ubuntu/Software/people_counter/camera/devel/lib/python3/dist-packages/espros_tof_cam635/cfg")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/build/espros_tof_cam635/catkin_generated/installspace/espros_tof_cam635.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/build/espros_tof_cam635/catkin_generated/installspace/espros_tof_cam635.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/espros_tof_cam635/cmake" TYPE FILE FILES
-    "/home/ubuntu/Software/mzheng/ros/build/espros_tof_cam635/catkin_generated/installspace/espros_tof_cam635Config.cmake"
-    "/home/ubuntu/Software/mzheng/ros/build/espros_tof_cam635/catkin_generated/installspace/espros_tof_cam635Config-version.cmake"
+    "/home/ubuntu/Software/people_counter/camera/build/espros_tof_cam635/catkin_generated/installspace/espros_tof_cam635Config.cmake"
+    "/home/ubuntu/Software/people_counter/camera/build/espros_tof_cam635/catkin_generated/installspace/espros_tof_cam635Config-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/espros_tof_cam635" TYPE FILE FILES "/home/ubuntu/Software/mzheng/ros/src/espros_tof_cam635/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/espros_tof_cam635" TYPE FILE FILES "/home/ubuntu/Software/people_counter/camera/src/espros_tof_cam635/package.xml")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -75,7 +75,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/espros_tof_cam635/tof_cam635_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/espros_tof_cam635" TYPE EXECUTABLE FILES "/home/ubuntu/Software/mzheng/ros/devel/lib/espros_tof_cam635/tof_cam635_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/espros_tof_cam635" TYPE EXECUTABLE FILES "/home/ubuntu/Software/people_counter/camera/devel/lib/espros_tof_cam635/tof_cam635_node")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/espros_tof_cam635/tof_cam635_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/espros_tof_cam635/tof_cam635_node")
     file(RPATH_CHANGE
@@ -89,6 +89,6 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/espros_tof_cam635" TYPE DIRECTORY FILES "/home/ubuntu/Software/mzheng/ros/src/espros_tof_cam635/launch")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/espros_tof_cam635" TYPE DIRECTORY FILES "/home/ubuntu/Software/people_counter/camera/src/espros_tof_cam635/launch")
 endif()
 

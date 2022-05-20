@@ -3,7 +3,7 @@
 # generated from catkin/cmake/template/script.py.in
 # creates a relay to a python script source file, acting as that file.
 # The purpose is that of a symlink
-python_script = '/home/ubuntu/Software/mzheng/ros/src/img_proc/scripts/img_proc_node.py'
+python_script = '/home/ubuntu/Software/people_counter/camera/src/img_proc/scripts/img_proc_node.py'
 with open(python_script, 'r') as fh:
     context = {
         '__builtins__': __builtins__,

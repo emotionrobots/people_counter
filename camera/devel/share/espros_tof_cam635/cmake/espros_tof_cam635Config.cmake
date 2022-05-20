@@ -67,14 +67,14 @@ set(espros_tof_cam635_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(espros_tof_cam635_SOURCE_PREFIX /home/ubuntu/Software/mzheng/ros/src/espros_tof_cam635)
-  set(espros_tof_cam635_DEVEL_PREFIX /home/ubuntu/Software/mzheng/ros/devel)
+  set(espros_tof_cam635_SOURCE_PREFIX /home/ubuntu/Software/people_counter/camera/src/espros_tof_cam635)
+  set(espros_tof_cam635_DEVEL_PREFIX /home/ubuntu/Software/people_counter/camera/devel)
   set(espros_tof_cam635_INSTALL_PREFIX "")
   set(espros_tof_cam635_PREFIX ${espros_tof_cam635_DEVEL_PREFIX})
 else()
   set(espros_tof_cam635_SOURCE_PREFIX "")
   set(espros_tof_cam635_DEVEL_PREFIX "")
-  set(espros_tof_cam635_INSTALL_PREFIX /home/ubuntu/Software/mzheng/ros/install)
+  set(espros_tof_cam635_INSTALL_PREFIX /home/ubuntu/Software/people_counter/camera/install)
   set(espros_tof_cam635_PREFIX ${espros_tof_cam635_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(espros_tof_cam635_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/ubuntu/Software/mzheng/ros/devel/include;/home/ubuntu/Software/mzheng/ros/src/espros_tof_cam635/include " STREQUAL " ")
+if(NOT "/home/ubuntu/Software/people_counter/camera/devel/include;/home/ubuntu/Software/people_counter/camera/src/espros_tof_cam635/include " STREQUAL " ")
   set(espros_tof_cam635_INCLUDE_DIRS "")
-  set(_include_dirs "/home/ubuntu/Software/mzheng/ros/devel/include;/home/ubuntu/Software/mzheng/ros/src/espros_tof_cam635/include")
+  set(_include_dirs "/home/ubuntu/Software/people_counter/camera/devel/include;/home/ubuntu/Software/people_counter/camera/src/espros_tof_cam635/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/ubuntu/Software/mzheng/ros/devel/include;/home/ubuntu/Software/mzh
         message(FATAL_ERROR "Project 'espros_tof_cam635' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'espros_tof_cam635' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/ubuntu/Software/mzheng/ros/src/espros_tof_cam635/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'espros_tof_cam635' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/ubuntu/Software/people_counter/camera/src/espros_tof_cam635/${idir}'.  ${_report}")
     endif()
     _list_append_unique(espros_tof_cam635_INCLUDE_DIRS ${include})
   endforeach()
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/Software/mzheng/ros/devel/lib;/home/ubuntu/Software/mzheng/ros/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/ubuntu/Software/people_counter/camera/devel/lib;/home/ubuntu/Software/people_counter/camera/devel/lib;/home/ubuntu/Software/mzheng/ros/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

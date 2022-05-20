@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/Software/mzheng/ros/install
+prefix=/home/ubuntu/Software/people_counter/camera/install
 
 Name: img_proc
 Description: Description of img_proc

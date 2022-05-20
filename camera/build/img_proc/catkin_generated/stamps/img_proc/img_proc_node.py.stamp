@@ -40,55 +40,67 @@ import tf2_ros
 import tf2_py as tf2
 from tf2_sensor_msgs.tf2_sensor_msgs import do_transform_cloud
 import paho.mqtt.client as mqtt
+import mysql.connector
 from BlobTracker import BlobTracker
+import time
 
 
 node = None
-client = mqtt.Client()
+client = mqtt.Client("mqtt://mqtt.e-motion.ai", True, None, mqtt.MQTTv311)
 
 def on_connect(client, userdata, flags, rc):
     print("connected to server")
-    client.subscribe("topic1")
+    #client.subscribe("preserve")
+    client.subscribe("/history")
+    client.publish("/history", json.dumps("connected"))
+
 
 def on_message(client, userdata, msg):
-    print("Message received-> " + msg.topic + " " + str(msg.payload))
-    
+    print("Message received-> " + msg.topic + " " + msg.payload.decode('UTF-8'))
+    if msg.topic == "/history" :
+      if msg.payload.decode('UTF-8') == "get history":
+        getHistory()
+
 def getDateTime(now):
-    datetime = now.strftime("%Y/%m/%d %H")
+    datetime = now.strftime("%Y-%m-%d %H:%M:%S")
+    '''
     time = format(now.strftime("%H"))
     day = format(now.strftime("%d"))
     month = format(now.strftime("%m"))
     year = now.strftime("%Y")
     weekday = now.strftime("%w")
-    return datetime, time, day, month, year, weekday
+    '''
+    return datetime #, time, day, month, year, weekday
     
+'''
 def format(string):
     if string[0] == "0":
       return string[1:]
     return string
+'''
 
 client.on_connect = on_connect
 client.on_message = on_message
 
-
 # uncomment this line!!!
+print("test connection")
 client.connect("mqtt.e-motion.ai")
+client.loop_start()
 
 
 class Message:
-  def __init__(self, device, deviceid, longitude, latitude, location, datetime, time, day, month,
-               year, weekday, enter, exit):
+  def __init__(self, device, deviceid, location, datetime, enter, exit):
     self.device = device
     self.deviceid = deviceid
-    self.longitude = longitude
-    self.latitude = latitude
+    #self.longitude = longitude
+    #self.latitude = latitude
     self.location = location
     self.datetime = datetime
-    self.time = time
-    self.day = day
-    self.month = month
-    self.year = year
-    self.weekday = weekday
+    #self.time = time
+    #self.day = day
+    #self.month = month
+    #self.year = year
+    #self.weekday = weekday
     self.enter = enter
     self.exit = exit
 
@@ -96,24 +108,78 @@ class Message:
     d = {}
     d["device"] = self.device
     d["deviceid"] = self.deviceid
-    d["longitude"] = self.longitude
-    d["latitude"] = self.latitude
+   #d["longitude"] = self.longitude
+   #d["latitude"] = self.latitude
     d["location"] = self.location
     d["datetime"] = self.datetime
-    d["time"] = self.time
-    d["day"] = self.day
-    d["month"] = self.month
-    d["year"] = self.year
-    d["weekday"] = self.weekday
+    #d["time"] = self.time
+    #d["day"] = self.day
+    #d["month"] = self.month
+    #d["year"] = self.year
+    #d["weekday"] = self.weekday
     d["enter"] = self.enter
     d["exit"] = self.exit
     return json.dumps(d)
+
+#===========================================================================
+# mysql connector and cursor setup
+#===========================================================================
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="emotioneering",
+  password="password",
+  database="history"
+)
+#time DATETIME, enterCount smallint unsigned, exitCount smallint unsigned
+mycursor = mydb.cursor()
+
+sql = "INSERT INTO history (time, enterCount, exitCount) VALUES (%s, %s, %s)"
 
 #===========================================================================
 #  dynamic_reconfigure callback 
 #===========================================================================
 def dr_callback(config, level):
   return config
+
+#===========================================================================
+#  retrieves enter/exit history from database and publish to backend
+#===========================================================================
+def getHistory():
+  mycursor.execute("SELECT * FROM history")
+
+  '''
+  time = json.loads(msg)
+  beginning = time[0]
+  ending = time[1]
+  mycursor = mydb.cursor()
+  if datetime.now() - datetime.strptime(beginning,"%Y-%m-%d %H:%M:%S") > 60: #catches error if the request is out of range, need more testing
+    client.publish("history", json.dumps("ERROR_History_Out_Of_Range"))
+  else:
+    mycursor.execute("""
+    SELECT time, enterCount, exitCount FROM history 
+    WHERE time between '%s' and '%s'
+    order by time asc
+    """ %(beginning, ending))
+  '''
+  myresult = mycursor.fetchall()
+
+  #print(myresult)
+  
+  resultList = []
+
+  for x in myresult:
+      listTemp = [x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2]]
+      resultList.append(listTemp)
+  
+  myresult = json.dumps(resultList)
+
+  client.publish("/history", myresult)
+
+  mycursor.execute("DELETE FROM history")
+
+  print("getHistory() completed")
+
+    
 
 
 #===========================================================================
@@ -158,6 +224,13 @@ class ImgProcNode(object):
     # blob tracker
     self.tracker = BlobTracker()
     self.enterExit = []
+
+    # publish timer
+    #self.start = time.time()
+
+    # cumulative enter and exit
+    self.cumulativeEnter = 0
+    self.cumulativeExit = 0
 
     # Subscribe to camera data 
     rospy.Subscriber('/espros_tof_cam635/camera/image_raw1', Image, self.amp_callback)
@@ -255,12 +328,12 @@ class ImgProcNode(object):
   #  Compute learningRate based on movement
   #===================================================
   def computeLearningRate(self, diff):
-    lr = 0
+    lr = 0.0
     alpha = self.learningRateAlpha
     lrMax = self.learningRateMax
     if diff < 96:
-    	eta = diff / 9600.0
-    	lr = alpha / (eta + alpha/lrMax)
+      eta = diff / 9600.0
+      lr = alpha / (eta + alpha/lrMax)
     return lr
 
   #===================================================
@@ -321,7 +394,7 @@ class ImgProcNode(object):
     original = cv2.cvtColor(original,cv2.COLOR_GRAY2BGR)
 
     markers = cv2.watershed(original.astype('uint8'),markers)
-    print(np.unique(markers).size-2)
+    #print(np.unique(markers).size-2)
     original[markers == -1] = [0,0,255]
 
     cntList = self.watershedToContour(originalCopy, markers)
@@ -361,7 +434,7 @@ class ImgProcNode(object):
       bx = int(m['m10']/m['m00'])
       by = int(m['m01']/m['m00'])
     else:
-      print("illegitimate blob")
+      print("illegitimate blob - img_proc_node")
       bx = 0
       by = 0
     return bx, by
@@ -466,11 +539,21 @@ class ImgProcNode(object):
   #  Periodic call to refresh image and compute fg&bg and such
   #===================================================
   def periodic(self):
+
+    mycursor.execute("SELECT COUNT(*) FROM history")
+    #print(mycursor.fetchall())
+    
+    rowCount = mycursor.fetchall()[0][0]
+    if rowCount >= 200:
+      getHistory()
+    
+
     dimg = self.camera['depth']
     aimg = self.camera['amp']
     zpoints = self.camera['z']
 
-    print('periodic is running')
+    #client.publish("presence", json.dumps("periodic is running"))
+    #print('periodic is running')
     
     backgroundMask = self.getBgMask(aimg)
     foreground = cv2.bitwise_and(aimg, aimg, mask = backgroundMask)
@@ -485,7 +568,8 @@ class ImgProcNode(object):
       ret, zpointThresh = cv2.threshold(zpoint, 10, 255, cv2.THRESH_BINARY)
       foreground = cv2.bitwise_and(zpointThresh, zpointThresh, mask = backgroundMask)
       foreground = self.morph_clean(foreground)
-      cv2.imshow('foreground', self.prepare(foreground,4))
+      #cv2.imshow('aimg', self.prepare(aimg,4))
+      #cv2.imshow('foreground', self.prepare(foreground,4))
 
       blobs = self.segmentation(foreground, zpoint, zpoints)
 
@@ -520,7 +604,7 @@ class ImgProcNode(object):
             x, y = self.findCenter(j)
           
             
-      cv2.imshow("trail", self.prepare(trail, 4))
+      #cv2.imshow("trail", self.prepare(trail, 4))
     
     now = datetime.now()
     '''
@@ -529,7 +613,7 @@ class ImgProcNode(object):
       tracked_blobs = len(self.tracker.matchedPairs)
       if tracked_blobs != self.peopleInFrame:
         dt, time, day, month, year, weekday = getDateTime(now)
-        m1 = Message("rpi4", 16, 455, 566, "Store entrance", dt, time, day, month, year, weekday, 			      tracked_blobs, tracked_blobs)
+        m1 = Message("rpi4", 16, 455, 566, "Store entrance", dt, time, day, month, year, weekday, tracked_blobs, tracked_blobs)
         print("people in frame", tracked_blobs)
         self.peopleInFrame = tracked_blobs
         print(m1.dictStr())
@@ -545,17 +629,35 @@ class ImgProcNode(object):
         pass
       peopleEntered = self.tracker.currentEnter
       peopleExited = self.tracker.currentExit
-      # device, deviceid, longtitude, latitude, location, time, enter, exit, people in 		building
-      dt, time, day, month, year, weekday = getDateTime(now)
-      m1 = Message("rpi4", 16, 455, 566, "Store entrance", dt, time, day, month, year, weekday, peopleEntered, peopleExited)
-      print(m1.dictStr())
-      client.publish("topic1", json.dumps(m1.dictStr()))
-      print(m1.dictStr())
+      # device, deviceid, longtitude, latitude, location, time, enter, exit, people in building
+      dt = getDateTime(now)
+      if not (peopleEntered == 0 and peopleExited == 0):
+        m1 = Message("rpi4", 16, "Store entrance", dt, peopleEntered, peopleExited)
+
+        self.cumulativeEnter += peopleEntered
+        self.cumulativeExit += peopleExited
+
+        mysqlVal = (dt, peopleEntered, peopleExited)
+        mycursor.execute(sql, mysqlVal)
+        
+        mydb.commit()
+        
+        #client.publish("presence", json.dumps(m1.dictStr()))
+        print(m1.dictStr())
+    '''
+    if time.time() - self.start >= 60:
+        if self.cumulativeEnter > 0 or self.cumulativeExit > 0:
+            client.publish("presence", json.dumps([self.cumulativeEnter, self.cumulativeExit]))
+            self.cumulativeEnter = 0
+            self.cumulativeExit = 0
+            self.start = time.time()
+    '''
 
   #===================================================
   #  Start processing 
   #===================================================
   def start(self):
+    #print("test: node.start()")
     while not rospy.is_shutdown():
       self.periodic()
       key = cv2.waitKey(33)
@@ -569,8 +671,11 @@ class ImgProcNode(object):
 #===========================================================================
 def main(argv):
   global node
+  #global client
+  #client.connect("mqtt.e-motion.ai")
   node = ImgProcNode()
   srv = Server(img_procConfig, dr_callback)
+  #print(node)
   node.start()
   return
 

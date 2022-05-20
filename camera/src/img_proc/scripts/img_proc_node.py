@@ -46,43 +46,36 @@ import time
 
 
 node = None
-client = mqtt.Client()
+client = mqtt.Client("mqtt://mqtt.e-motion.ai", True, None, mqtt.MQTTv311)
+cam_serialNum = 3
 
 def on_connect(client, userdata, flags, rc):
     print("connected to server")
     #client.subscribe("preserve")
     client.subscribe("/history")
+    #client.publish("/history", json.dumps("connected"))
+
 
 def on_message(client, userdata, msg):
-    print("Message received-> " + msg.topic + " " + str(msg.payload))
+    print("Message received-> " + msg.topic + " " + msg.payload.decode('UTF-8'))
     if msg.topic == "/history" :
-      if msg.payload == "get history":
-        getHistory(msg.payload)
+      print("msg.topic checked")
+      if msg.payload.decode('UTF-8') == "get history":
+        print("msg.payload checked")
+        getHistory()
 
 def getDateTime(now):
-    datetime = now.strftime("%Y-%m-%d %H:%M:%S")
-    '''
-    time = format(now.strftime("%H"))
-    day = format(now.strftime("%d"))
-    month = format(now.strftime("%m"))
-    year = now.strftime("%Y")
-    weekday = now.strftime("%w")
-    '''
+    datetime = now.isoformat()#.strftime("%Y-%m-%d %H:%M:%S")
     return datetime #, time, day, month, year, weekday
     
-'''
-def format(string):
-    if string[0] == "0":
-      return string[1:]
-    return string
-'''
 
 client.on_connect = on_connect
 client.on_message = on_message
 
-
 # uncomment this line!!!
+#print("test connection")
 client.connect("mqtt.e-motion.ai")
+client.loop_start()
 
 
 class Message:
@@ -141,38 +134,36 @@ def dr_callback(config, level):
 #===========================================================================
 #  retrieves enter/exit history from database and publish to backend
 #===========================================================================
-def getHistory(msg):
-  mycursor.execute("SELECT * FROM history")
+def getHistory():
 
-  '''
-  time = json.loads(msg)
-  beginning = time[0]
-  ending = time[1]
-  mycursor = mydb.cursor()
-  if datetime.now() - datetime.strptime(beginning,"%Y-%m-%d %H:%M:%S") > 60: #catches error if the request is out of range, need more testing
-    client.publish("history", json.dumps("ERROR_History_Out_Of_Range"))
-  else:
-    mycursor.execute("""
-    SELECT time, enterCount, exitCount FROM history 
-    WHERE time between '%s' and '%s'
-    order by time asc
-    """ %(beginning, ending))
-  '''
+  mycursor.execute("SELECT * FROM history")
+  print("test: all local history selected")
+  
+  #print("test: pre fetchall()")
   myresult = mycursor.fetchall()
 
-  #print(myresult)
-  
   resultList = []
 
   for x in myresult:
-      listTemp = [x[0].strftime("%Y-%m-%d %H:%M:%S"), x[1], x[2]]
-      resultList.append(listTemp)
+      print(x)
+      rowDateTime = x[1].isoformat()
+      if x[2] > 0:
+        resultList.append([rowDateTime, x[2]])
+      if x[3] > 0:
+        resultList.append([rowDateTime, -x[3]])
   
-  myresult = json.dumps(resultList)
+  historyMsg = {
+    "cam_serial": cam_serialNum,
+    "body": resultList
+  }
 
-  client.publish("/history", myresult)
+  client.publish("/history", json.dumps(historyMsg))
 
   mycursor.execute("DELETE FROM history")
+  mydb.commit()
+  print("test: all local history deleted")
+
+  print("getHistory() completed")
 
     
 
@@ -221,7 +212,7 @@ class ImgProcNode(object):
     self.enterExit = []
 
     # publish timer
-    self.start = time.time()
+    #self.start = time.time()
 
     # cumulative enter and exit
     self.cumulativeEnter = 0
@@ -535,11 +526,6 @@ class ImgProcNode(object):
   #===================================================
   def periodic(self):
 
-    rowCount = cursor.execute("SELECT COUNT(*) FROM history").split[0]
-    if rowCount >= 200:
-      getHistory()
-
-
     dimg = self.camera['depth']
     aimg = self.camera['amp']
     zpoints = self.camera['z']
@@ -553,15 +539,15 @@ class ImgProcNode(object):
     
     #print(foreThresh)
 
-    if zpoints is not None:
+    if zpoints is not None and aimg is not None and dimg is not None:
 
       metersTo8bit = np.vectorize(self.zpointNormalize)
       zpoint = metersTo8bit(zpoints[:]).astype('uint8')
       ret, zpointThresh = cv2.threshold(zpoint, 10, 255, cv2.THRESH_BINARY)
       foreground = cv2.bitwise_and(zpointThresh, zpointThresh, mask = backgroundMask)
       foreground = self.morph_clean(foreground)
-      cv2.imshow('aimg', self.prepare(aimg,4))
-      cv2.imshow('foreground', self.prepare(foreground,4))
+      #cv2.imshow('aimg', self.prepare(aimg,4))
+      #cv2.imshow('foreground', self.prepare(foreground,4))
 
       blobs = self.segmentation(foreground, zpoint, zpoints)
 
@@ -576,7 +562,14 @@ class ImgProcNode(object):
       
       # Update tracker
       self.tracker.update(np.array(blobs))
-      
+      '''
+      print(aimg)
+      print("------------------------------------------------------------------")
+      print(dimg)
+      print("test 2 -----------------------------------------------------------")
+      print(zpoints)
+      '''
+
       trail = (aimg/16).astype('uint8')
       trail = cv2.cvtColor(trail, cv2.COLOR_GRAY2RGB)
       trail = cv2.line(trail,(25,0),(25,60),(0,0,255),2)
@@ -596,9 +589,9 @@ class ImgProcNode(object):
             x, y = self.findCenter(j)
           
             
-      cv2.imshow("trail", self.prepare(trail, 4))
+      #cv2.imshow("trail", self.prepare(trail, 4))
     
-    now = datetime.now()
+    now = datetime.utcnow()
     '''
     # counting the number of people in frame
     if self.countInFrame:
@@ -615,6 +608,7 @@ class ImgProcNode(object):
     # tracking the number of people entering or exiting  
    
     if self.tracker.change == True:
+
       print('number of blobs tracked', len(self.tracker.unmatched_tracked))
       for j in self.tracker.unmatched_tracked:
         # print(self.findCenter(j))
@@ -625,7 +619,7 @@ class ImgProcNode(object):
       dt = getDateTime(now)
       if not (peopleEntered == 0 and peopleExited == 0):
         m1 = Message("rpi4", 16, "Store entrance", dt, peopleEntered, peopleExited)
-
+        #m1 = Message(dt, peopleEntered, peopleExited)
         self.cumulativeEnter += peopleEntered
         self.cumulativeExit += peopleExited
 
@@ -636,19 +630,19 @@ class ImgProcNode(object):
         
         #client.publish("presence", json.dumps(m1.dictStr()))
         print(m1.dictStr())
-    '''
-    if time.time() - self.start >= 60:
-        if self.cumulativeEnter > 0 or self.cumulativeExit > 0:
-            client.publish("presence", json.dumps([self.cumulativeEnter, self.cumulativeExit]))
-            self.cumulativeEnter = 0
-            self.cumulativeExit = 0
-            self.start = time.time()
-    '''
+        
+      #checks if unsent row > 200
+      mycursor.execute("SELECT COUNT(*) FROM history")
+      rowCount = mycursor.fetchall()[0][0] 
+      if rowCount >= 200:
+        getHistory()
+        print("auto update completed")
 
   #===================================================
   #  Start processing 
   #===================================================
   def start(self):
+    #print("test: node.start()")
     while not rospy.is_shutdown():
       self.periodic()
       key = cv2.waitKey(33)
@@ -662,8 +656,11 @@ class ImgProcNode(object):
 #===========================================================================
 def main(argv):
   global node
+  #global client
+  #client.connect("mqtt.e-motion.ai")
   node = ImgProcNode()
   srv = Server(img_procConfig, dr_callback)
+  #print(node)
   node.start()
   return
 

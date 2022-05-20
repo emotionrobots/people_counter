@@ -67,14 +67,14 @@ set(img_proc_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(img_proc_SOURCE_PREFIX /home/ubuntu/Software/mzheng/ros/src/img_proc)
-  set(img_proc_DEVEL_PREFIX /home/ubuntu/Software/mzheng/ros/devel)
+  set(img_proc_SOURCE_PREFIX /home/ubuntu/Software/people_counter/camera/src/img_proc)
+  set(img_proc_DEVEL_PREFIX /home/ubuntu/Software/people_counter/camera/devel)
   set(img_proc_INSTALL_PREFIX "")
   set(img_proc_PREFIX ${img_proc_DEVEL_PREFIX})
 else()
   set(img_proc_SOURCE_PREFIX "")
   set(img_proc_DEVEL_PREFIX "")
-  set(img_proc_INSTALL_PREFIX /home/ubuntu/Software/mzheng/ros/install)
+  set(img_proc_INSTALL_PREFIX /home/ubuntu/Software/people_counter/camera/install)
   set(img_proc_PREFIX ${img_proc_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/Software/mzheng/ros/install/lib;/home/ubuntu/Software/mzheng/ros/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/ubuntu/Software/people_counter/camera/install/lib;/home/ubuntu/Software/people_counter/camera/devel/lib;/home/ubuntu/Software/mzheng/ros/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
