@@ -21,7 +21,7 @@
 <h3 align="center">People Counter</h3>
 
   <p align="center">
-    A project aimes to count the number of people that enter and exit a room by tracking the movement of people entering and exiting the frame of a camera sensor.
+    A project aims to count the number of people that enter and exit a room by tracking the movement of people entering and exiting the frame of a camera sensor.
     <br />
     <a href="https://github.com/emotionrobots/people_counter/issues">Report Bug</a>
     ·
