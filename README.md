@@ -118,8 +118,11 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 
 Hunter Han - hunter.han@gmail.com
+
 Michael Zheng - zhengpengen@gmail.com
+
 Yifan Ma - yifanma07@gmail.com
+
 Larry Li - larrylisky@gmail.com
 
 Project Link: [https://github.com/emotionrobots/people_counter](https://github.com/emotionrobots/people_counter)
