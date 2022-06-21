@@ -17,3 +17,11 @@ The People Counter frontend application uses tailwindcss to effectively display 
 
 # Configure the API Link
 In the ```src/data/user_data.js``` file, edit the ```link``` variable to point to the API endpoint.
+
+# Cognito Configuration Different User Pool
+After running ```npm install``` run ```amplify configure``` and follow the steps.
+
+Configure your secret access token and ids located in ```~/.aws/credentials```
+
+# Run
+```npm start```
